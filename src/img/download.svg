@@ -1,9 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="11.022" height="16.003" viewBox="0 0 11.022 16.003">
-  <g id="Group_39" data-name="Group 39" transform="translate(0 -1)">
-    <g id="Group_35" data-name="Group 35" transform="translate(0 1)">
-      <path id="Fill-32" d="M12.853,21.6,7.342,16.093l.751-.751,4.76,4.761,4.76-4.761.751.751L12.853,21.6" transform="translate(-7.342 -11.152)" fill-rule="evenodd"/>
-      <path id="Fill-33" d="M16,8h1.141v9.7H16Z" transform="translate(-11.06 -8)" fill-rule="evenodd"/>
-    </g>
-    <path id="Fill-33-2" data-name="Fill-33" d="M0,0H1.141V11.022H0Z" transform="translate(11.022 15.862) rotate(90)" fill-rule="evenodd"/>
-  </g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>

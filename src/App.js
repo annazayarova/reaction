@@ -7,12 +7,13 @@ import { GlobalStyle } from './styles/global';
 
 import { lightTheme, darkTheme } from './styles/theme';
 import Home from "./pages/Home";
-import Login from "./pages/Login";
+import SignIn from "./pages/SignIn";
 import NoMatchPage from './pages/NoMatchPage';
 import PasswordReset from "./pages/PasswordReset";
 import PrivateRoute from "./PrivateRoute";
 import SignUp from "./pages/SignUp";
 import Tenant from "./pages/Tenant";
+import Payment from "./pages/Payment";
 
 const App = () => {
     const [ theme, setTheme ] = useState('light');
@@ -34,12 +35,16 @@ const App = () => {
                             <Home />
                         </Route>
 
-                        <Route exact path="/login">
-                            <Login />
+                        <Route exact path="/signin">
+                            <SignIn />
                         </Route>
 
                         <Route exact path="/signup">
                             <SignUp />
+                        </Route>
+
+                        <Route exact path="/payment">
+                            <Payment />
                         </Route>
 
                         <Route exact path="/passwordReset">

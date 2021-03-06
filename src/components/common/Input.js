@@ -35,7 +35,7 @@ const Root = styled.input`
     color: ${ ({ theme }) => theme.text };
     height: ${ ({ notTransparent }) => notTransparent ? '56px' : 'auto'};
     font-size: 14px;
-    font-family: regular, Verdana;
+    font-family: regular, Arial;
     outline: none;
     padding: ${ ({ notTransparent }) => notTransparent ? '0 16px' : '0'};
     width: 100%;

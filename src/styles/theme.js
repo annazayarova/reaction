@@ -1,5 +1,6 @@
 export const color = {
-    primary: '#49c5b6',
+    //primary: '#49c5b6',
+    primary: '#59ead2',
     red: '#ff1744',
     grey: {
         grey0: '#fafafa',
@@ -18,11 +19,13 @@ export const color = {
 }
 
 export const lightTheme = {
-    body: color.white,
+    body: color.grey.grey0,
     border: color.grey.grey1,
-    content: color.grey.grey0,
+    content: color.white,
     disabled: color.grey.grey3,
+    icon: color.grey.grey6,
     inverse: color.grey.grey10,
+    grey: color.grey.grey7,
     text: color.grey.grey10,
     placeholder: color.grey.grey5,
     title: color.grey.grey10,
@@ -30,7 +33,8 @@ export const lightTheme = {
     separator: color.grey.grey2,
     primary: color.primary,
     red: color.red,
-    transition: 'all 300ms cubic-bezier(0.465, 0.183, 0.153, 0.946)'
+    transition: 'all 300ms cubic-bezier(0.465, 0.183, 0.153, 0.946)',
+    tabletBreakpoint: '767px'
 }
 
 export const darkTheme = {
@@ -38,7 +42,9 @@ export const darkTheme = {
     border: color.grey.grey8,
     content: color.grey.grey10,
     disabled: color.grey.grey3,
+    icon: color.grey.grey6,
     inverse: color.grey.grey0,
+    grey: color.grey.grey7,
     text: color.white,
     title: color.white,
     overlay: 'rgba(255,255,255,0.2)',
@@ -46,5 +52,6 @@ export const darkTheme = {
     placeholder: color.grey.grey5,
     primary: color.primary,
     red: color.red,
-    transition: 'all 300ms cubic-bezier(0.465, 0.183, 0.153, 0.946)'
+    transition: 'all 300ms cubic-bezier(0.465, 0.183, 0.153, 0.946)',
+    tabletBreakpoint: '767px'
 }

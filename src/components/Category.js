@@ -1,18 +1,18 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import styled from 'styled-components';
 
 import { AuthContext } from '../Auth';
-import AddNewItem from './AddNewItem'
 import Block from './common/Block';
 import Button from './common/Button';
-import Caption from './common/Caption';
+import Title from './common/Title';
 import db from '../services/firebase';
-import Link from'./common/Link';
 import ModalFull from './common/ModalFull';
 import Toggle from './common/Toggle';
 import Text from './common/Text';
 import KeyValue from './common/KeyValue';
 import Items from './Items';
+
+import { ReactComponent as MoreIcon} from '../img/more.svg';
 
 const Category = ({
     category,
@@ -42,43 +42,33 @@ const Category = ({
     const filteredItems = items.filter(item => item.categoryId === category.id);
 
     useEffect(() => {
-        if (!open) {
+        if (open) {
             setName(category.name);
         }
-    }, [ open ]);
+    }, [category.name, open]);
 
     if (hiddenCategory && currentUser?.uid !== userId) {
-        return null; 
+        return null;
     }
+
     return (
-        <Root id={ category.name }>
-            <CategoryBlock>
-                <CategoryLine invisible={ invisible }>
-                    <StyledCaption grey
-                        hiddenCategory={ hiddenCategory }
-                    >
+        <Root>
+            <>
+                <CategoryName invisible={ invisible }>
+                    <StyledTitle hiddenCategory={ hiddenCategory }>
                         { category.name }
-                    </StyledCaption>
+                    </StyledTitle>
 
-                    { currentUser && currentUser.uid == userId &&
-                        <Link text="Edit"
-                            onClick={ () => setOpen(true) }
-                        />
+                    { currentUser && currentUser.uid === userId &&
+                        <StyledMoreIcon onClick={ () => setOpen(true) } />
                     }
-                </CategoryLine>
-
-                { currentUser && currentUser.uid == userId &&
-                    <AddNewItem categoryId={ category.id }
-                        name={ category.name }
-                        invisible={ invisible }
-                    />
-                }
+                </CategoryName>
 
                 <Items items={ filteredItems }
                     hiddenCategory={ category.hidden }
                     userId={ userId }
                 />
-            </CategoryBlock>
+            </>
 
             { open && <ModalFull disabled={ !Boolean(name) }
                 open={ open }
@@ -125,29 +115,25 @@ export default Category;
 const Root = styled.div`
 `;
 
-const StyledCaption = styled(Caption)`
-    background: ${ ({ theme }) => theme.body };
-    padding: 0 4px;
+const StyledMoreIcon = styled(MoreIcon)`
+    width: 20px;
+    height: 20px;
+
+    path {
+        &:last-of-type {
+            fill: ${ ({ theme }) => theme.text }
+        }
+    }
+`;
+
+const StyledTitle = styled(Title)`
+    text-transform: uppercase;
     text-decoration: ${ ({ hiddenCategory }) => hiddenCategory ? 'line-through' : 'none' };
 `;
 
-const CategoryBlock = styled.div`
-`;
-
-const CategoryLine = styled.div`
+const CategoryName = styled.div`
+    align-items: center;
     display: ${ ({ invisible }) => invisible ? 'none' : 'flex' };
     justify-content: space-between;
-    position: relative;
-    padding: 0 24px;
-
-    &:after {
-        position: absolute;
-        content: '';
-        top: 7px;
-        left: 0;
-        width: 100%;
-        height: 1px;
-        background-color: ${ ({ theme }) => theme.border };
-        z-index: -1;
-    }
+    padding: 24px;
 `;

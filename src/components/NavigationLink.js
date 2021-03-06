@@ -1,13 +1,15 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { NavHashLink } from 'react-router-hash-link';
 
+import { tenantRoute } from '../helpers/routes';
 import { AuthContext } from '../Auth';
 import Text from './common/Text';
-import { tenantRoute } from '../helpers/routes';
 
 const Navigation = ({
-    category
+    category,
+    activeLink,
+    navigationRef
 }) => {
     const { currentUser } = useContext(AuthContext);
 
@@ -19,15 +21,16 @@ const Navigation = ({
     };
 
     return (
-        <>
+        <Root hidden={ !currentUser && category.hidden }>
             { (currentUser || !category.hidden) &&
-                <StyledNavHashLink
-                    smooth
-                    activeClassName="selected"
-                    isActive={ setActive }
-                    to={ `#${ category.name }` }
-                >
+                    <StyledNavHashLink
+                        smooth
+                        activeClassName="selected"
+                        isActive={ setActive }
+                        to={ `#${ category.name }` }
+                    >
                     <StyledText uppercase
+                        small
                         key={ category.id }
                         lineThrough={ category.hidden }
                     >
@@ -35,15 +38,13 @@ const Navigation = ({
                     </StyledText>
                 </StyledNavHashLink>
             }
-        </>
+        </Root>
     )
 };
 
 export default Navigation;
 
 const StyledText = styled(Text)`
-    margin-right: 24px;
-    display: flex;
     text-transform: uppercase;
 `;
 
@@ -53,4 +54,12 @@ const StyledNavHashLink = styled(NavHashLink)`
             color:  red;
         }
     }
+`;
+
+const Root = styled.div`
+    align-items: center;
+    border-right: 1px solid ${ ({ theme, hidden }) => hidden ? 'transparent' : theme.border };
+    display: flex;
+    height: 100%;
+    padding: ${ ({ hidden }) => hidden ? 0 : '0 24px' };
 `;

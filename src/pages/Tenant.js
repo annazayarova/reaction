@@ -1,21 +1,20 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useLocation } from "react-router-dom";
-
 import Categories from '../components/Categories';
 import db from '../services/firebase';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
+import HeaderOfUser from '../components/HeaderOfUser';
 import Navigation from '../components/Navigation';
 import NotFound from '../components/common/NotFound';
-import Stories from '../components/Stories/StoriesSmall';
 
 const Tenant = ({
     theme,
     themeToggled,
-	onToggleTheme,
-	uid
+	onToggleTheme
 }) => {
+
 	const [ displayName, setDisplayName ] = useState('');
 	const [ categories, setCategories ] = useState([]);
 	const [ items, setItems ] = useState([]);
@@ -71,7 +70,7 @@ const Tenant = ({
 				price:  doc.data().price
 			}) ))
 		})
-	}, [ ]);
+	}, []);
 
 	const searchItems = !searchTerm
 		? items
@@ -80,9 +79,24 @@ const Tenant = ({
 			|| item.description.toLowerCase().includes(searchTerm.toLocaleLowerCase())
 		);
 
+	const refs = categories.reduce((acc, value) => {
+		acc[value.id] = React.createRef();
+		return acc;
+	}, {});
+
+	const handleNavigationClick = id =>
+    refs[id].current.scrollIntoView({
+      	behavior: 'smooth',
+      	block: 'start',
+    });
+
     return (
         <Root>
 			<Wrap>
+				<HeaderOfUser userId={ idFromUrl }
+					categories={ categories }
+				/>
+
 				<Header displayName={ displayName }
 					theme={ theme }
 					onToggleTheme={ onToggleTheme }
@@ -93,11 +107,8 @@ const Tenant = ({
 					userId={ idFromUrl }
 				/>
 
-				<Stories visible={ !searchTerm }/>
-
 				<Navigation categories={ categories }
 					invisible={ searchTerm }
-					userId={ idFromUrl }
 				/>
 
 				{ searchTerm.length > 0 && !searchItems.length > 0 && (

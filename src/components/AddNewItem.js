@@ -1,21 +1,26 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import firebase from 'firebase';
 import styled from 'styled-components';
 
 import { AuthContext } from '../Auth';
-import { ReactComponent as AddIcon } from '../img/add.svg';
 import Block from './common/Block';
 import db from '../services/firebase';
-import Textarea from './common/Textarea';
 import KeyValue from './common/KeyValue';
-import Link from './common/Link';
+import CategoriesList from './CategoriesList';
 import ModalFull from './common/ModalFull';
+import Text from './common/Text';
+import Textarea from './common/Textarea';
 
-const AddNewItem = ({ categoryId, name, invisible }) => {
+const AddNewItem = ({
+    categories,
+    onClose
+}) => {
+    const initialActiveCategoryId = window.localStorage.getItem('activeCategory') || categories[0].id;
+
     const [ itemName, setItemName ] = useState('');
-    const [ open, setOpen ] = useState(false);
     const [ price, setPrice ] = useState('');
     const [ description, setDescription ] = useState('');
+    const [ activeCategoryId, setActiveCategoryId ] = useState(initialActiveCategoryId);
 
     const { currentUser } = useContext(AuthContext);
 
@@ -28,46 +33,25 @@ const AddNewItem = ({ categoryId, name, invisible }) => {
         .collection('items')
         .add({
             name: itemName,
-            categoryId,
+            categoryId: activeCategoryId,
             price,
             description,
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
         });
 
-        setOpen(false);
-
-        setItemName('');
-        setPrice('');
-        setDescription('')
+        onClose();
     };
 
-    const handleClick = () => {
-        setOpen(true);
-    }
-
     useEffect(() => {
-        if (!open) {
-            setItemName('');
-            setPrice('');
-            setDescription('');
-        }
-    }, [open]);
+        window.localStorage.setItem('activeCategory', activeCategoryId);
+    })
 
     return (
-        <>
-            <StyledLink icon={ <AddIcon /> }
-                invisible={ invisible }
-                text= { `+ New item for ${ name }` }
-                onClick={ handleClick }
-            />
-
-            { open && <ModalFull disabled={ !itemName || !price }
-                open={ open }
+        <ModalFull disabled={ !itemName || !price }
                 title="New item"
-                onClose={ () => setOpen(false)  }
+                onClose={ onClose  }
                 onSave={ addItem }
             >
-
                 <Block>
                     <KeyValue value={ itemName }
                         label="Name"
@@ -82,7 +66,21 @@ const AddNewItem = ({ categoryId, name, invisible }) => {
                         label="Price"
                         onChange={ (e) => setPrice(e.target.value) }
                         placeholder="0,00"
+                        type="number"
                     />
+                </Block>
+
+                <Block>
+                    <CategoryBlock>
+                        <StyledText bold>
+                            Category
+                        </StyledText>
+
+                        <CategoriesList categories={ categories }
+                            activeCategoryId={ activeCategoryId }
+                            onCategoryChange={ (category) => setActiveCategoryId(category) }
+                        />
+                    </CategoryBlock>
                 </Block>
 
                 <Block>
@@ -91,14 +89,16 @@ const AddNewItem = ({ categoryId, name, invisible }) => {
                         placeholder="Description"
                     />
                 </Block>
-            </ModalFull> }
-        </>
+        </ModalFull>
     );
 }
 
 export default AddNewItem;
 
-const StyledLink = styled(Link)`
-    display: ${ ({ invisible }) => invisible ? 'none' : 'flex' };
-    margin:  24px 24px 0;
+const CategoryBlock = styled.div`
+    display: flex;
+`;
+
+const StyledText = styled(Text)`
+    margin-right: 24px;
 `;

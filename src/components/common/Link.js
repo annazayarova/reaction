@@ -1,23 +1,27 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import Caption from '../common/Caption';
+import Text from '../common/Text';
 
-const Link = ({ className, icon, text, onClick }) => {
+const Link = ({
+    className,
+    text,
+    onClick
+}) => {
     return (
         <Root onClick={ onClick }
             className={ className }
         >
-            <StyledCaption>
+            <StyledText>
                 { text }
-            </StyledCaption>
+            </StyledText>
         </Root>
     );
 }
 
 export default Link;
 
-const StyledCaption = styled(Caption)`
+const StyledText = styled(Text)`
     text-decoration: underline;
 `;
 

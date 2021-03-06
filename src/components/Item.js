@@ -1,19 +1,19 @@
 import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 
-import { ReactComponent as OrderIcon} from '../img/like.svg';
-import { ReactComponent as OrderedIcon} from '../img/liked.svg';
+import { ReactComponent as MoreIcon} from '../img/more.svg';
 
 import { AuthContext } from '../Auth';
 import Block from './common/Block';
 import Button from './common/Button';
 import db from '../services/firebase';
 import KeyValue from './common/KeyValue';
-import Link from './common/Link';
 import ModalFull from './common/ModalFull';
 import Text from './common/Text';
 import Toggle from './common/Toggle';
 import Textarea from './common/Textarea';
+
+import img from '../img/2.jpg';
 
 const Item = ({
     item,
@@ -25,7 +25,6 @@ const Item = ({
     const [ description, setDescription ] = useState(item.description || '')
     const [ hiddenItem, setHiddenItem ] = useState(item.hidden || '');
     const [ open, setOpen ] = useState(false);
-    const [ ordered, setOrdered ] = useState(false);
 
     const { currentUser } = useContext(AuthContext);
 
@@ -50,13 +49,17 @@ const Item = ({
 
     return (
         <Root>
+            <ImgContainer>
+                <img src={ img } alt="reaction" />
+            </ImgContainer>
+
             <Content>
                 <Left>
-                    <Text bold
+                    <Name bold
                         lineThrough={ hiddenItem || hiddenCategory }
                     >
                         { item.name }
-                    </Text>
+                    </Name>
 
                     { item.description &&
                         <Description lineThrough={ hiddenItem || hiddenCategory }>
@@ -64,22 +67,15 @@ const Item = ({
                         </Description>
                     }
 
-                    { currentUser && currentUser.uid == userId &&
-                        <Link text="Edit"
-                                onClick={ () => setOpen(true) }
-                        />
-                    }
+                    <Text lineThrough={ hiddenItem || hiddenCategory }>
+                        € { Number(item.price).toFixed(2) }
+                    </Text>
                 </Left>
 
                 <Right>
-                    <Text lineThrough={ hiddenItem || hiddenCategory }>
-                        € { item.price }
-                    </Text>
-
-                    <Order onClick={ () => setOrdered(!ordered) }>
-                        <StyledOrderIcon ordered={ ordered }/>
-                        <StyledOrderedIcon ordered={ ordered }/>
-                    </Order>
+                    { currentUser && currentUser.uid === userId &&
+                        <StyledMoreIcon onClick={ () => setOpen(true) } />
+                    }
                 </Right>
             </Content>
 
@@ -144,30 +140,28 @@ const Item = ({
 
 export default Item;
 
-const StyledOrderIcon= styled(OrderIcon)`
-    display: ${ ({ ordered }) => ordered ? 'none' : 'block' };
-    height: 16px;
-    width: 16px;
-    transition: all 150ms;
-    fill: ${ ({ theme }) => theme.text };
-
-`;
-
-const StyledOrderedIcon= styled(OrderedIcon)`
-    display: ${ ({ ordered }) => ordered ? 'block' : 'none' };
-    height: 16px;
-    width: 16px;
-    transition: all 150ms;
-
-    fill: ${ ({ theme }) => theme.red };
-`;
-
-const Order = styled.div`
-    margin-top: 8px;
-`;
-
 const Root = styled.div`
-    margin: 0 24px;
+    margin: 0 24px 24px;
+    background: ${ ({ theme }) => theme.content };
+`;
+
+const StyledMoreIcon = styled(MoreIcon)`
+    width: 20px;
+    height: 20px;
+
+    path {
+        &:last-of-type {
+            fill: ${ ({ theme }) => theme.text }
+        }
+    }
+`;
+
+const Name = styled(Text)`
+    margin-bottom: 4px;
+`;
+
+const Description = styled(Text)`
+    margin-bottom: 4px;
 `;
 
 const Left = styled.div`
@@ -184,12 +178,26 @@ const Right = styled.div`
 `;
 
 const Content = styled.div`
-    margin-bottom: 24px;
     display: flex;
     justify-content: space-between;
+    padding: 16px;
 
 `;
 
-const Description = styled(Text)`
-    margin-top: 8px;
+const ImgContainer = styled.div`
+    position: relative;
+
+    &:after {
+        content: "";
+        display: block;
+        padding-bottom: 100%;
+    }
+
+    img {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
 `;

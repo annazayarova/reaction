@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-  <g id="Group_44" data-name="Group 44" transform="translate(-1932 -534)">
-    <circle id="Ellipse_26" data-name="Ellipse 26" cx="8" cy="8" r="8" transform="translate(1932 534)" />
-    <g id="Icon-Close-O" transform="translate(1921 551.862)">
-      <path id="Fill-53" d="M8.964,16.523,8.343,15.9l7.56-7.56.621.622-7.56,7.56" transform="translate(6.657 -22.204)" fill="#fdfdfd" fill-rule="evenodd"/>
-      <path id="Fill-54" d="M15.9,16.523l-7.56-7.56.621-.622,7.56,7.56-.621.622" transform="translate(6.657 -22.204)" fill="#fdfdfd" fill-rule="evenodd"/>
-    </g>
-  </g>
-</svg>

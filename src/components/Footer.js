@@ -1,18 +1,23 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import Caption from './common/Caption';
+import Text from './common/Text';
 
 const Footer = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+
     return (
         <Root>
-            <Caption>
-                © 2020 powered by
+            <StyledText small
+                grey
+            >
+                © 2020 <span>-</span> { year } powered by
 
-                <Link href="http://reactionmenu.com" target="_blank">
+                <Link href={ window.location.origin }>
                     Reaction menu
                 </Link>
-            </Caption>
+            </StyledText>
         </Root>
     );
 }
@@ -20,22 +25,26 @@ const Footer = () => {
 export default Footer;
 
 const Root  = styled.div`
-    height: 64px;
-    line-height: 64px;
-    text-align: center;
+    align-items: center;
     background-color: ${ ({ theme }) => theme.content };
-    position: absolute;
     bottom: 0;
+    display: flex;
+    height: 64px;
+    justify-content: center;
+    position: absolute;
+    text-align: center;
     width: 100%;
 `;
 
 const Link  = styled.a`
-    -webkit-tap-highlight-color: rgba(0,0,0,0);
-    margin-left: 8px;
-    text-decoration: underline;
-    color: ${ ({ theme }) => theme.text };
+    margin-left: 7px;
+    color: ${ ({ theme }) => theme.primary };
+    font-family: medium;
+`;
 
-    &:active {
-        ${ ({ theme }) => theme.primary };
+const StyledText  = styled(Text)`
+    span {
+        color: ${ ({ theme }) => theme.primary };
+        font-family: bold;
     }
 `;

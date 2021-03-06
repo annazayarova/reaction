@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import ReactDOM from "react-dom";
 
 import Title from '../common/Title';
+import useLockBodyScroll from '../../hooks/useLockBodyScroll';
+
 
 const JSX_MODAL = ({
     children,
@@ -23,13 +25,11 @@ const JSX_MODAL = ({
         onClose();
     };
 
+    useLockBodyScroll();
+
     return (
-        <Window onClick={ handleClick }
-            open={ open }
-        >
-            <Root ref={ ref }
-                open={ open }
-            >
+        <Window onClick={ handleClick }>
+            <Root ref={ ref }>
                 <Header>
                     <StyledTitle>
                         { title }
@@ -66,9 +66,7 @@ const Window  = styled.div`
     position: fixed;
     top: 0;
     width: 100vw;
-    opacity: ${ ({ open }) => (open ? '1' : '0') };
     transition: ${ ({ theme }) => theme.transition };
-    visibility: ${ ({ open }) => (open ? 'visible' : 'hidden') };
     z-index: 3;
 `;
 
@@ -78,7 +76,6 @@ const Root  = styled.div`
     width: 80%;
     border-radius: 8px;
     position: relative;
-    transform: ${ ({ open }) => (open ? 'scale(1)' : 'scale(0.8)') };
     transition: ${ ({ theme }) => theme.transition };
 `;
 

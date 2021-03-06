@@ -4,6 +4,7 @@ import ReactDOM from "react-dom";
 
 import Button from '../common/Button';
 import Title from '../common/Title';
+import useLockBodyScroll from '../../hooks/useLockBodyScroll';
 
 const JSX_MODAL = ({
     children,
@@ -13,6 +14,8 @@ const JSX_MODAL = ({
     disabled,
     title
 }) => {
+
+    useLockBodyScroll();
 
     return (
         <Window open={ open }>
@@ -72,7 +75,6 @@ const Window  = styled.div`
     top: 0;
     width: 100vw;
     transition: ${ ({ theme }) => theme.transition };
-    transform: ${ ({ open }) => (open ? 'translateY(0)' : 'translateY(100%)') };
     z-index: 3;
 `;
 
@@ -80,6 +82,7 @@ const Root  = styled.div`
     width: 100%;
     min-height: 100%;
     position: relative;
+    overflow: auto;
 `;
 
 const StyledTitle  = styled(Title)`

@@ -1,11 +1,10 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
-import Caption from '../common/Caption';
 import Input from '../common/Input';
 
 import { ReactComponent as SearchIcon } from '../../img/search.svg';
-import { ReactComponent as CleanIcon } from '../../img/clean.svg';
+import { ReactComponent as CloseIcon } from '../../img/close.svg';
 
 const Search = ({
     onChange,
@@ -14,15 +13,8 @@ const Search = ({
 }) => {
     const [open, setOpen ] = useState(false);
 
-    const inputFocus = useRef(null);
-
     const handleClose = () => {
         setOpen(false);
-        reset();
-    }
-
-    const handleClean = () => {
-        inputFocus.current.focus();
         reset();
     }
 
@@ -42,14 +34,9 @@ const Search = ({
                         placeholder="Search items"
                         onChange={ onChange }
                         autoFocus
-                        ref={ inputFocus }
                     />
 
-                    { value && <StyledCleanIcon onClick={ handleClean } /> }
-
-                    <Caption onClick={ handleClose }>
-                        Cancel
-                    </Caption>
+                    <StyledCloseIcon onClick={ handleClose } />
                 </InputWrapper>
             }
 
@@ -60,22 +47,24 @@ const Search = ({
 export default Search;
 
 const StyledSearchIcon  = styled(SearchIcon)`
-    width: 16px;
-    height: 16px;
+    width: 24px;
+    height: 24px;
 
     path {
-        fill: ${ ({ theme }) => theme.text }
+        &:last-of-type {
+            fill: ${ ({ theme }) => theme.text }
+        }
     }
 `;
 
-const StyledCleanIcon  = styled(CleanIcon)`
-    width: 20px;
-    height: 20px;
-    margin-right: 16px;
+const StyledCloseIcon  = styled(CloseIcon)`
+    width: 24px;
+    height: 24px;
 
-    circle {
-        fill: ${ ({ theme }) => theme.placeholder }
-    }
+    path {
+        &:last-of-type {
+            fill: ${ ({ theme }) => theme.text }
+    }}
 `;
 
 const Root  = styled.div`

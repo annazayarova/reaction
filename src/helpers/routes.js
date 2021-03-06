@@ -1,2 +1,2 @@
-export const loginRoute = '/login';
-export const tenantRoute = (currentUser) => `/${ currentUser.displayName }`;
+export const loginRoute = '/signin';
+export const tenantRoute = (currentUser) => `/${ currentUser.uid }`;

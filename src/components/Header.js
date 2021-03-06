@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 
+import { AuthContext } from '../Auth';
 import Search from './common/Search';
 import Settings from './Settings';
-import Text from './common/Text';
+import Title from './common/Title';
+import { ReactComponent as LogoIcon } from '../img/logo.svg';
 
 const Header = ({
     displayName,
@@ -15,6 +17,7 @@ const Header = ({
     searchValue,
     userId
 }) => {
+    const { currentUser } = useContext(AuthContext);
 
     return (
         <Root>
@@ -24,9 +27,9 @@ const Header = ({
                 userId={ userId }
             />
 
-            <Text mono>
+            <Title medium>
                 { displayName }
-            </Text>
+            </Title>
 
             <Search value={ searchValue }
                 reset={ resetSearch }
@@ -40,15 +43,14 @@ export default Header;
 
 const Root  = styled.div`
     align-items: center;
-    background-color: ${ ({ theme }) => theme.body };
+    background: ${ ({ theme }) => theme.body };
     border-bottom: 1px solid ${ ({ theme }) => theme.border };
     display: flex;
-    height: 64px;
     justify-content: space-between;
-    width: 100%;
+    height: 64px;
     position: relative;
-`;
-
-const Logo  = styled.div`
-
+    width: 100%;
+    position: sticky;
+    top: 0;
+    z-index: 1;
 `;

@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Button = ({
     className,
@@ -10,6 +11,7 @@ const Button = ({
     red,
     notTransparent
 }) => {
+
     return (
         <Root className={ className }
             disabled={ disabled }
@@ -26,12 +28,12 @@ const Button = ({
 export default Button;
 
 const Root = styled.button`
-    -webkit-tap-highlight-color: rgba(0,0,0,0);
     background: ${ ({ theme, notTransparent }) => notTransparent ? theme.primary : 'none' };
     border: none;
+    cursor: pointer;
     color: ${ ({ theme, red, notTransparent }) => red ? theme.red : notTransparent ? 'white' : theme.primary };
-    font-family: ${ ({ regular }) => regular ? 'regular' : 'bold' };
-    font-size: 15px;
+    font-family: bold;
+    font-size: 16px;
     height: ${ ({ notTransparent }) => notTransparent ? '56px' : 'auto'};
     margin: 0;
     outline: none;
@@ -40,6 +42,15 @@ const Root = styled.button`
     width: ${ ({ notTransparent }) => notTransparent ? '100%' : 'auto'};
 
     &:disabled {
-        color: ${ ({ theme }) => theme.disabled };
+        color: ${ ({ notTransparent, theme }) => notTransparent ? '' : theme.disabled };
+        cursor: unset;
+    }
+
+    &:active {
+        opacity: 0.9;
+    }
+
+    &:hover {
+        opacity: 0.9;
     }
 `;

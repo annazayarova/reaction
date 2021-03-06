@@ -32,19 +32,19 @@ export default Toggle;
 const Root = styled.div`
     height: 24px;
     position: relative;
-    width: 48px;
+    width: 40px;
     -webkit-tap-highlight-color: rgba(0,0,0,0);
 `;
 
 const CheckBoxLabel = styled.label`
-    background: ${ ({ theme }) => theme.primary };
+    background: ${ ({ theme }) => theme.disabled };
     border-radius: 32px;
     cursor: pointer;
     height: 24px;
     left: 0;
     position: absolute;
     top: 0;
-    width: 48px;
+    width: 40px;
 
     &::after {
         background: white;
@@ -61,18 +61,18 @@ const CheckBox = styled.input`
     border-radius: 12px;
     height: 24px;
     opacity: 0;
-    width: 48px;
+    width: 40px;
     z-index: 1;
 
     &:checked + ${ CheckBoxLabel } {
-        background: ${ ({ theme }) => theme.placeholder };
+        background: ${ ({ theme }) => theme.navigationBackground };
 
         &::after {
             border-radius: 50%;
             content: "";
             display: block;
             height: 20px;
-            margin-left: 26px;
+            margin-left: 18px;
             transition: 150ms;
             width: 20px;
         }

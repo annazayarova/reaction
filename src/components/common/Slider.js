@@ -4,7 +4,7 @@ import ReactDOM from "react-dom";
 
 import Title from '../common/Title';
 
-import { ReactComponent as CloseIcon } from '../../img/simpleClose.svg';
+import { ReactComponent as CloseIcon } from '../../img/close.svg';
 
 const JSX_MODAL = ({
     children,
@@ -59,11 +59,14 @@ const Header  = styled.div`
 `;
 
 const StyledCloseIcon = styled(CloseIcon)`
-    width: 16px;
-    height: 16px;
+    width: 20px;
+    height: 20px;
+    z-index: 11;
 
     path {
-        fill: ${ ({ theme }) => theme.text };
+        &:last-of-type {
+            fill: ${ ({ theme }) => theme.text }
+        }
     }
 `;
 

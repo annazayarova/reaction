@@ -10,7 +10,7 @@ const Textarea = ({
         <Root value={ value }
             onChange={ onChange }
             placeholder={ placeholder }
-            rows={ 3 }
+            rows={ 15 }
             lineThrough={ hidden }
         />
 );
@@ -22,16 +22,16 @@ const Root = styled.textarea`
     background: transparent;
     border-radius: 0;
     border: none;
-    color: ${ ({ theme }) => theme.placeholder };
+    color: ${ ({ theme }) => theme.text };
     font-size: 14px;
     line-height: 20px;
     outline: none;
     padding: 0;
-    font-family: regular, Verdana;
+    font-family: regular, Arial;
     width: 100%;
     text-decoration: ${ ({ lineThrough }) => lineThrough ? 'line-through' : 'none' };
 
     ::placeholder {
-        color: ${ ({ theme }) => theme.grey };
+        color: ${ ({ theme }) => theme.placeholder };
     }
 `;

@@ -1,10 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
-  <g id="Group_39" data-name="Group 39" transform="translate(-1822.722 -855.086)">
-    <path id="Fill-169" d="M7.357,23.268a4.991,4.991,0,0,0-3.644-3.644l.32-1.28a6.309,6.309,0,0,1,4.6,4.6l-1.28.32" transform="translate(1821.13 849.697)" fill="#f66" fill-rule="evenodd"/>
-    <path id="Fill-171" d="M2,26.156l2.058-.514A2.124,2.124,0,0,0,2.514,24.1L2,26.156" transform="translate(1821.628 848.024)" fill="#f66" fill-rule="evenodd"/>
-    <g id="Group_36" data-name="Group 36">
-      <path id="Fill-168" d="M.722,22.133l1.829-7.317L13.683,3.685,19.17,9.172,8.039,20.3.722,22.133Zm3.089-6.6L2.639,20.215l4.685-1.172,10.3-10.215L14.01,5.278,3.811,15.53Z" transform="translate(1822 852.953)" fill="#f66" fill-rule="evenodd"/>
-      <path id="Fill-172" d="M24.185,7.777l-5.5-5.5L20.876.086l.342.046A5.963,5.963,0,0,1,26.33,5.244l.046.342L24.185,7.777Zm-3.523-5.5L24.185,5.8l.7-.7a4.566,4.566,0,0,0-3.523-3.523l-.7.7Z" transform="translate(1816.346 855)" fill="#f66" fill-rule="evenodd"/>
-    </g>
-  </g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>

@@ -95,12 +95,13 @@ export const GlobalStyle = createGlobalStyle`
     body {
         background: ${ ({ theme }) => theme.body };
         color: ${ ({ theme }) => theme.text };
-        font-family: regular, Verdana, sans-serif;
+        font-family: regular, Arial, sans-serif;
         font-size: 15px;
         line-height: 24px;
         margin: 0;
         padding: 0;
         transition: all 0.15s linear;
+        overflow-x: hidden
     }
 
     html,

@@ -1,24 +1,34 @@
-import React, { useContext } from 'react';
+import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 
-import { AuthContext } from '../Auth';
-import AddNewCategory from './AddNewCategory';
 import NavigationLink from './NavigationLink';
+import Text from '../components/common/Text';
 
 const Navigation = ({
     categories,
     invisible,
-    userId
+    navigationRef,
+    activeLink
 }) => {
-	const { currentUser } = useContext(AuthContext);
+    const headerRef = useRef(null);
+
+    if (!categories.length) {
+        return (
+        <StyledText grey small>
+            Start by creating the very first category by clicking + button at the right top corner
+        </StyledText>
+        )
+    }
 
     return (
-        <Root invisible={ invisible }>
-            { currentUser && currentUser.uid == userId && <AddNewCategory /> }
-
+        <Root invisible={ invisible }
+            ref={ headerRef }
+        >
             { categories && categories.map((category) => (
                 <NavigationLink category={ category }
                     key={ category.id }
+                    activeLink={ activeLink }
+                    navigationRef={ navigationRef }
                 />
             )) }
         </Root>
@@ -27,19 +37,20 @@ const Navigation = ({
 
 export default Navigation;
 
+const StyledText = styled(Text)`
+    margin: 24px;
+`;
+
 const Root = styled.div`
-    -ms-overflow-style: -ms-autohiding-scrollbar;
-    -webkit-overflow-scrolling: touch;
-    align-items: center;
+    background: ${ ({ theme }) => theme.body };
+    border-bottom: 1px solid ${ ({ theme }) => theme.border };
     display: ${ ({ invisible }) => invisible ? 'none' : 'flex' };
     height: 64px;
     overflow-x: auto;
+    position: sticky;
+    top: 64px;
     white-space: nowrap;
     width: 100%;
-    padding: 0 24px;
-    position: sticky;
-    top: 0;
-    background: ${ ({ theme }) => theme.body };
     z-index: 2;
 
     ::-webkit-scrollbar {
