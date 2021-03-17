@@ -1,13 +1,17 @@
 import styled from 'styled-components';
 
 const Title = styled.h1`
-    color: ${ ({ grey, theme }) => grey ? theme.grey : theme.text };
+    color: ${ ({ disabled, grey, theme }) =>
+        grey ? theme.grey :
+        disabled ? theme.disabled : theme.text };
     text-align: left;
-    font-size: 18px;
+    font-size: 17px;
     line-height: 24px;
-    font-family: ${ ({ medium }) => medium ? 'medium' : 'bold' };
-    text-decoration: ${ ({ lineThrough }) => lineThrough ? 'line-through' : 'none' };
-    letter-spacing: -1px;
+    font-family: ${ ({ medium }) => medium ? 'medium, Arial' : 'bold, Arial' };
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
 
     ${ ({ big }) => big && `
         font-size: 78px;

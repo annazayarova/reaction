@@ -1,26 +1,44 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import QRCode from 'qrcode.react';
 
+
+import { AuthContext } from '../Auth';
 import { ReactComponent as UserIcon } from '../img/account.svg';
 import Block from './common/Block';
 import Modal from './common/Modal';
+import ModalFull from './common/ModalFull';
 import Text from './common/Text';
 import db from '../services/firebase';
+import KeyValue from './common/KeyValue';
 
 const AddButton = ({
-    className
+    className,
+    displayName
 }) => {
     const [ open, setOpen ] = useState(false);
+    const [ openEdit, setOpenEdit ] = useState(false);
+
+    const { currentUser } = useContext(AuthContext);
 
     const handleClick = () => {
         setOpen(true);
     }
 
-
     const handleLogout = () => {
         setOpen(false);
         db.auth().signOut();
+    };
+
+    const updateProfile = () => {
+        currentUser && db.firestore()
+        .collection('users')
+        .doc(currentUser.uid)
+        .set({
+            displayName: displayName
+        }, { merge: true })
+
+        setOpenEdit(false);
     };
 
     const url = window.location.href;
@@ -43,18 +61,18 @@ const AddButton = ({
             { open &&
                 <Modal open={ open }
                     title="Profile"
-                    fromBottom
                     onClose={ () => setOpen(false) }
                 >
                     <Block center
+                        onClick={ () => (setOpenEdit(true), setOpen(false)) }
                     >
                         Edit profile
                     </Block>
 
-                    <Block center>
-                        <Text onClick={ downloadQR }>
-                            Download QR code
-                        </Text>
+                    <Block center
+                        onClick={ downloadQR }
+                    >
+                        Download QR code
 
                         <StyledQRCode id="QRCode"
                             value={ url }
@@ -62,13 +80,27 @@ const AddButton = ({
                         />
                     </Block>
 
-                    <Block center>
-                        <Text onClick={ handleLogout }>
-                            Sign out
-                        </Text>
+                    <Block onClick={ handleLogout }
+                        center
+                    >
+                        Sign out
                     </Block>
                 </Modal>
             }
+
+            { openEdit &&
+                <ModalFull onClose={ () => setOpenEdit(false) }
+                    disabled={ !displayName }
+                    title="Edit profile"
+                    onSave={ updateProfile }
+                >
+                    <Block>
+                        <KeyValue value={ displayName }
+                            label="Name"
+                            //onChange={ (e) => setName(e.target.value) }
+                        />
+                    </Block>
+            </ModalFull> }
         </Root>
     );
 }

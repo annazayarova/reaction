@@ -36,7 +36,6 @@ const AddButton = ({
             { open &&
                 <Modal open={ open }
                     title="Create"
-                    fromBottom
                     onClose={ () => setOpen(false) }
                 >
                     <Block center

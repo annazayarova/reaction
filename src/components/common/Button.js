@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import React from 'react';
-import { Link } from 'react-router-dom';
+
+import LoadingSpinner from './LoadingSpinner';
 
 const Button = ({
     className,
@@ -9,7 +10,8 @@ const Button = ({
     onClick,
     regular,
     red,
-    notTransparent
+    notTransparent,
+    loading
 }) => {
 
     return (
@@ -19,8 +21,11 @@ const Button = ({
             regular={ regular }
             red={ red }
             notTransparent={ notTransparent }
+            loading={ loading }
         >
             { label }
+
+            { loading && <StyledLoadingSpinner /> }
         </Root>
     );
 }
@@ -31,19 +36,22 @@ const Root = styled.button`
     background: ${ ({ theme, notTransparent }) => notTransparent ? theme.primary : 'none' };
     border: none;
     cursor: pointer;
-    color: ${ ({ theme, red, notTransparent }) => red ? theme.red : notTransparent ? 'white' : theme.primary };
-    font-family: bold;
-    font-size: 16px;
+    color: ${ ({ theme, red, notTransparent }) => red ? theme.red : notTransparent ? 'white' : theme.text };
+    font-family: ${ ({ regular }) => regular ? 'regular' : 'bold' };
+    font-size: 15px;
     height: ${ ({ notTransparent }) => notTransparent ? '56px' : 'auto'};
     margin: 0;
     outline: none;
     padding: 0;
     outline: none;
+    position: relative;
     width: ${ ({ notTransparent }) => notTransparent ? '100%' : 'auto'};
+    pointer-events: ${ ({ loading }) => loading ? 'none' : '' };
 
     &:disabled {
         color: ${ ({ notTransparent, theme }) => notTransparent ? '' : theme.disabled };
         cursor: unset;
+        pointer-events: none;
     }
 
     &:active {
@@ -53,4 +61,10 @@ const Root = styled.button`
     &:hover {
         opacity: 0.9;
     }
+`;
+
+const StyledLoadingSpinner = styled(LoadingSpinner)`
+    position: absolute;
+    right: 16px;
+    top: 18px;
 `;

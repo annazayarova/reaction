@@ -1,0 +1,35 @@
+@font-face {
+    font-family: bold;
+    src: url('./fonts/ApercuPro-Bold.woff2') format('woff2'),
+        url('./fonts/ApercuPro-Bold.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+    }
+
+    @font-face {
+    font-family: regular;
+    src: url('./fonts/ApercuPro-Regular.woff2') format('woff2'),
+        url('./fonts/ApercuPro-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+    }
+
+    @font-face {
+    font-family: medium;
+    src: url('./fonts/ApercuPro-Medium.woff2') format('woff2'),
+        url('./fonts/ApercuPro-Medium.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+    }
+
+    @font-face {
+    font-family: light;
+    src: url('./fonts/ApercuPro-Light.woff2') format('woff2'),
+        url('./fonts/ApercuPro-Light.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+    }

@@ -9,6 +9,7 @@ import firebase from 'firebase';
 
 const HeaderOfUser = ({
     categories,
+    displayName,
     userId
 }) => {
     const [ loading, setLoading ] = useState(false);
@@ -35,7 +36,7 @@ const HeaderOfUser = ({
 
     return (
         <Root>
-            <ProfileButton />
+            <ProfileButton displayName={ displayName } />
 
             <Link text={ loading ? "Processing..." : "Go to subscriptions" }
                 onClick={ handleGoToSubscription }

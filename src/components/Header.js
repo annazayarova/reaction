@@ -1,11 +1,9 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
-import { AuthContext } from '../Auth';
 import Search from './common/Search';
 import Settings from './Settings';
 import Title from './common/Title';
-import { ReactComponent as LogoIcon } from '../img/logo.svg';
 
 const Header = ({
     displayName,
@@ -17,19 +15,18 @@ const Header = ({
     searchValue,
     userId
 }) => {
-    const { currentUser } = useContext(AuthContext);
 
     return (
-        <Root>
+        <Root searchValue={ searchValue }>
             <Settings theme={ theme }
                 onToggleTheme={ onToggleTheme }
                 themeToggled={ themeToggled }
                 userId={ userId }
             />
 
-            <Title medium>
+            <StyledTitle medium>
                 { displayName }
-            </Title>
+            </StyledTitle>
 
             <Search value={ searchValue }
                 reset={ resetSearch }
@@ -53,4 +50,9 @@ const Root  = styled.div`
     position: sticky;
     top: 0;
     z-index: 1;
+    margin-bottom: ${ ({ searchValue }) => searchValue ? '24px' : 0 };
+`;
+
+const StyledTitle  = styled(Title)`
+    margin-left: 24px;
 `;

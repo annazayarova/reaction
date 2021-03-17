@@ -8,6 +8,7 @@ import useLockBodyScroll from '../../hooks/useLockBodyScroll';
 
 const JSX_MODAL = ({
     children,
+    label = 'Update',
     onClose,
     onSave,
     open,
@@ -30,7 +31,7 @@ const JSX_MODAL = ({
                         { title }
                     </StyledTitle>
 
-                    <Done label="Save"
+                    <Done label={ label }
                         onClick={ onSave }
                         disabled={ disabled }
                     />
@@ -49,26 +50,27 @@ function ModalFull(props) {
 export default ModalFull;
 
 const Header  = styled.div`
+    background-color: ${ ({ theme }) => theme.body };
     align-items: center;
     display: flex;
     justify-content: center;
-    padding: 16px;
+    padding: 16px 0;
     position: relative;
 `;
 
 const Close  = styled(Button)`
     position: absolute;
-    left: 16px;
+    left: 20px;
 `;
 
 
 const Done  = styled(Button)`
     position: absolute;
-    right: 16px;
+    right: 20px;
 `;
 
 const Window  = styled.div`
-    background-color: ${ ({ theme }) => theme.body };
+    background-color: ${ ({ theme }) => theme.content };
     height: 100vh;
     left: 0;
     position: fixed;

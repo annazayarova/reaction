@@ -5,15 +5,12 @@ import { ReactComponent as MoreIcon} from '../img/more.svg';
 
 import { AuthContext } from '../Auth';
 import Block from './common/Block';
-import Button from './common/Button';
 import db from '../services/firebase';
 import KeyValue from './common/KeyValue';
+import Modal from './common/Modal';
 import ModalFull from './common/ModalFull';
 import Text from './common/Text';
-import Toggle from './common/Toggle';
 import Textarea from './common/Textarea';
-
-import img from '../img/2.jpg';
 
 const Item = ({
     item,
@@ -23,51 +20,69 @@ const Item = ({
     const [ itemName, setItemName ] = useState(item.name || '')
     const [ price, setPrice ] = useState(item.price || '')
     const [ description, setDescription ] = useState(item.description || '')
-    const [ hiddenItem, setHiddenItem ] = useState(item.hidden || '');
     const [ open, setOpen ] = useState(false);
+    const [ openEdit, setOpenEdit ] = useState(false);
+    const [ openHide, setOpenHide ] = useState(false);
+    const [ openDelete, setOpenDelete ] = useState(false);
 
     const { currentUser } = useContext(AuthContext);
 
+    const docRef = currentUser && db.firestore()
+    .collection('users')
+    .doc(currentUser.uid)
+    .collection('items');
+
     const updateItem = () => {
-        db.firestore()
-        .collection('users')
-        .doc(currentUser.uid)
-        .collection('items')
+        docRef
         .doc(item.id).set({
-            name: itemName,
-            price: price,
-            description: description,
-            hidden: hiddenItem
+            name: itemName.trim(),
+            price: price.trim(),
+            description: description.trim()
         }, { merge: true })
 
-        setOpen(false);
+        setOpenEdit(false);
     };
 
-    if ((hiddenItem || hiddenCategory) && currentUser?.uid !== userId) {
+    const hideItem = () => {
+        docRef
+        .doc(item.id).set({
+            hidden: !item.hidden
+        }, { merge: true })
+
+        setOpenHide(false);
+    };
+
+    const deleteItem = () => {
+        docRef
+        .doc(item.id)
+        .delete()
+
+        setOpenDelete(false);
+    };
+
+    if ((item.hidden === true || hiddenCategory) && currentUser?.uid !== userId) {
         return null;
     }
 
     return (
         <Root>
-            <ImgContainer>
-                <img src={ img } alt="reaction" />
-            </ImgContainer>
-
             <Content>
                 <Left>
                     <Name bold
-                        lineThrough={ hiddenItem || hiddenCategory }
+                        disabled={ !!item.hidden || hiddenCategory }
                     >
                         { item.name }
                     </Name>
 
                     { item.description &&
-                        <Description lineThrough={ hiddenItem || hiddenCategory }>
+                        <Description disabled={ !!item.hidden || hiddenCategory }>
                             { item.description }
                         </Description>
                     }
 
-                    <Text lineThrough={ hiddenItem || hiddenCategory }>
+                    <Text disabled={ !!item.hidden || hiddenCategory }
+                        medium primary={ !(item.hidden || hiddenCategory) }
+                    >
                         € { Number(item.price).toFixed(2) }
                     </Text>
                 </Left>
@@ -80,25 +95,47 @@ const Item = ({
             </Content>
 
             { open &&
-                <ModalFull disabled={ !Boolean(itemName) }
-                    open={ open }
+                <Modal title="Item"
                     onClose={ () => setOpen(false) }
+                >
+                    <Block center
+                        onClick={ () => (setOpenEdit(true), setOpen(false)) }
+                    >
+                        Edit
+                    </Block>
+
+                    <Block center
+                        onClick={ () => (setOpenHide(true), setOpen(false)) }
+                    >
+                        { item.hidden === true ? 'Show' : 'Hide' }
+                    </Block>
+
+                    <Block center red bold
+                        onClick={ () => (setOpenDelete(true), setOpen(false)) }
+                    >
+                        Delete
+                    </Block>
+                </Modal>
+            }
+
+            { openEdit &&
+                <ModalFull onClose={ () => setOpenEdit(false) }
+                    disabled={ !itemName || !price }
                     title="Edit item"
                     onSave={ updateItem }
                 >
                     <Block>
-                        <KeyValue hidden={ hiddenItem }
-                            value={ itemName }
+                        <KeyValue value={ itemName }
                             label="Name"
                             onChange={ (e) => setItemName(e.target.value) }
                         />
                     </Block>
 
                     <Block>
-                        <KeyValue hidden={ hiddenItem }
-                            value={ price }
+                        <KeyValue value={ price }
                             label="Price"
                             onChange={ (e) => setPrice(e.target.value) }
+                            type="number"
                         />
                     </Block>
 
@@ -106,33 +143,32 @@ const Item = ({
                         <Textarea value={ description }
                             placeholder="Description"
                             onChange={ (e) => setDescription(e.target.value) }
-                            hidden={ hiddenItem }
                         />
                     </Block>
+            </ModalFull> }
 
-                    <Block>
-                        <Text>{ !hiddenItem ? 'Hide item' : 'Show item' } </Text>
-
-                        <Toggle checked={ hiddenItem }
-                            onChange={ () => setHiddenItem(!hiddenItem) }
-                            label={ !hiddenItem ? 'Hide item' : 'Show item' }
-                        />
+            { openHide &&
+                <Modal onClose={ () => setOpenHide(false) }
+                    title={ !!item.hidden ? 'Show item?' : 'Hide item?'}
+                >
+                    <Block center bold
+                        onClick={ hideItem }
+                    >
+                        { !!item.hidden ? 'Show' : 'Hide'}
                     </Block>
+                </Modal>
+            }
 
-                    <Block>
-                        <Button regular
-                            label="Delete item"
-                            onClick={ () => db.firestore()
-                                .collection('users')
-                                .doc(currentUser.uid)
-                                .collection('items')
-                                .doc(item.id)
-                                .delete()
-                            }
-                            red
-                        />
+            { openDelete &&
+                <Modal onClose={ () => setOpenDelete(false) }
+                    title='Delete item?'
+                >
+                    <Block center bold red
+                        onClick={ deleteItem }
+                    >
+                        Delete
                     </Block>
-                </ModalFull>
+                </Modal>
             }
         </Root>
     )

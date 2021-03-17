@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 const Input = React.forwardRef(({
     autoFocus,
+    center,
     className,
     hidden,
     name,
@@ -14,7 +15,8 @@ const Input = React.forwardRef(({
 }, ref) => (
     <Root autoFocus={ autoFocus }
         className={ className }
-        lineThrough={ hidden }
+        center={ center }
+        grey={ hidden }
         name={ name }
         notTransparent={ notTransparent }
         onChange={ onChange }
@@ -34,12 +36,12 @@ const Root = styled.input`
     border: ${ ({ theme, notTransparent }) => notTransparent ? `1px solid ${ theme.border }` : 'none'};
     color: ${ ({ theme }) => theme.text };
     height: ${ ({ notTransparent }) => notTransparent ? '56px' : 'auto'};
-    font-size: 14px;
+    font-size: 15px;
     font-family: regular, Arial;
     outline: none;
     padding: ${ ({ notTransparent }) => notTransparent ? '0 16px' : '0'};
     width: 100%;
-    text-decoration: ${ ({ lineThrough }) => lineThrough ? 'line-through' : 'none' };
+    text-align: ${ ({ center }) => center && 'center'};
 
     ::placeholder {
         color: ${ ({ theme }) => theme.placeholder };

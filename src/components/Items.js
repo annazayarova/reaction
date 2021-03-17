@@ -20,4 +20,5 @@ const Items = ({ items, hiddenCategory, userId }) => {
 export default Items;
 
 const Root = styled.div`
+
 `;

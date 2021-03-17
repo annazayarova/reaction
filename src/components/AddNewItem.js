@@ -13,7 +13,9 @@ import Textarea from './common/Textarea';
 
 const AddNewItem = ({
     categories,
-    onClose
+    onClose,
+    categoryId,
+    categoryName
 }) => {
     const initialActiveCategoryId = window.localStorage.getItem('activeCategory') || categories[0].id;
 
@@ -33,7 +35,7 @@ const AddNewItem = ({
         .collection('items')
         .add({
             name: itemName,
-            categoryId: activeCategoryId,
+            categoryId: categoryId ? categoryId : activeCategoryId,
             price,
             description,
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
@@ -51,6 +53,7 @@ const AddNewItem = ({
                 title="New item"
                 onClose={ onClose  }
                 onSave={ addItem }
+                label="Create"
             >
                 <Block>
                     <KeyValue value={ itemName }
@@ -76,10 +79,12 @@ const AddNewItem = ({
                             Category
                         </StyledText>
 
-                        <CategoriesList categories={ categories }
-                            activeCategoryId={ activeCategoryId }
-                            onCategoryChange={ (category) => setActiveCategoryId(category) }
-                        />
+                        { categoryId ? <Text>{ categoryName }</Text>
+                            : <CategoriesList categories={ categories }
+                                activeCategoryId={ activeCategoryId }
+                                onCategoryChange={ (category) => setActiveCategoryId(category) }
+                            />
+                        }
                     </CategoryBlock>
                 </Block>
 

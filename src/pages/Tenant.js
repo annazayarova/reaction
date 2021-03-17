@@ -84,17 +84,12 @@ const Tenant = ({
 		return acc;
 	}, {});
 
-	const handleNavigationClick = id =>
-    refs[id].current.scrollIntoView({
-      	behavior: 'smooth',
-      	block: 'start',
-    });
-
     return (
         <Root>
 			<Wrap>
 				<HeaderOfUser userId={ idFromUrl }
 					categories={ categories }
+					displayName={ displayName }
 				/>
 
 				<Header displayName={ displayName }

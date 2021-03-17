@@ -4,12 +4,11 @@ import ReactDOM from "react-dom";
 
 import Title from '../common/Title';
 import useLockBodyScroll from '../../hooks/useLockBodyScroll';
-
+import Block from '../common/Block';
 
 const JSX_MODAL = ({
     children,
     onClose,
-    open,
     title
 }) => {
 
@@ -30,13 +29,19 @@ const JSX_MODAL = ({
     return (
         <Window onClick={ handleClick }>
             <Root ref={ ref }>
-                <Header>
-                    <StyledTitle>
-                        { title }
-                    </StyledTitle>
-                </Header>
+                    <Header>
+                        <StyledTitle medium>
+                            { title }
+                        </StyledTitle>
+                    </Header>
 
-                { children }
+                    { children }
+
+                    <Block onClick={ onClose }
+                        center
+                    >
+                        Cancel
+                    </Block>
             </Root>
         </Window>
     );
@@ -49,6 +54,8 @@ function Modal(props) {
 export default Modal;
 
 const Header  = styled.div`
+    background-color: ${ ({ theme }) => theme.body };
+    border-radius: 8px 8px 0 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -71,12 +78,16 @@ const Window  = styled.div`
 `;
 
 const Root  = styled.div`
-    background-color: ${ ({ theme }) => theme.body };
-    height: auto;
-    width: 80%;
+    background-color: ${ ({ theme }) => theme.content };
     border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    height: auto;
+    max-width: 600px;
     position: relative;
     transition: ${ ({ theme }) => theme.transition };
+    width: 80%;
 `;
 
 const StyledTitle  = styled(Title)`

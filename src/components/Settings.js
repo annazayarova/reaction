@@ -14,12 +14,10 @@ import Toggle from './common/Toggle';
 const Settings = ({
     theme,
     onToggleTheme,
-    themeToggled,
-    userId
+    themeToggled
 }) => {
     const [open, setOpen] = useState(false);
 
-    const { currentUser } = useContext(AuthContext);
     const { t, i18n } = useTranslation();
 
     return (
@@ -50,15 +48,13 @@ const Settings = ({
                     />
                 </Block>
 
-                { currentUser?.uid !== userId &&
-                    <Block>
-                        <Link to="/signin">
-                            <Text>
+                <Block>
+                    <Link to="/">
+                        <Text>
                             { t('are_you_a_store_owner') }?
-                            </Text>
-                        </Link>
-                    </Block>
-                }
+                        </Text>
+                    </Link>
+                </Block>
             </Slider>
         </Root>
     );
@@ -79,6 +75,7 @@ const Menu  = styled.div`
     align-items: center;
     display: flex;
     justify-content: center;
+    border-right: 1px solid ${ ({ theme }) => theme.border };
 `;
 
 const StyledMenuIcon  = styled(MenuIcon)`

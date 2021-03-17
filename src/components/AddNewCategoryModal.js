@@ -24,7 +24,7 @@ const NewCategoryModal = ({
         .doc(currentUser.uid)
         .collection('categories')
         .add({
-            name: categoryName,
+            name: categoryName.trim(),
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
         });
 
@@ -32,8 +32,7 @@ const NewCategoryModal = ({
     };
 
     return (
-        <Modal open={ open }
-            onClose={ onClose }
+        <Modal onClose={ onClose }
             title="New category"
         >
             <Block>
@@ -41,18 +40,15 @@ const NewCategoryModal = ({
                     onChange={ (e) => setCategoryName(e.target.value) }
                     placeholder="Category name"
                     autoFocus
+                    center
                 />
             </Block>
 
-            <Block>
-                <Button label="Cancel"
-                    onClick={ onClose }
-                />
-
-                <Button disabled={ !categoryName }
-                    onClick={ addCategory }
-                    label="Create"
-                />
+            <Block center bold uppercase
+                disabled={ !categoryName }
+                onClick={ addCategory }
+            >
+                Create
             </Block>
         </Modal>
     )

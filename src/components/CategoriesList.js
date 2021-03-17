@@ -24,7 +24,7 @@ const CategoriesList = ({
     };
 
     const activeCategory = categories.find(category => (category.id === activeCategoryId)) || categories[0];
-console.log(activeCategoryId)
+
     return (
         <Root className={ className }>
             <StyledLink onClick={ () => setOpen(true) }

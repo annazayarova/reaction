@@ -9,7 +9,6 @@ import db from "../services/firebase";
 import Input from '../components/common/Input';
 import Title from '../components/common/Title';
 import Text from '../components/common/Text';
-import ReactionHeader from '../components/common/ReactionHeader';
 
 const SignIn = ({ history }) => {
     const [ error, setError ] = useState(null);
@@ -44,8 +43,6 @@ if (currentUser) {
 
     return (
         <>
-        <ReactionHeader />
-
         <Root>
             <StyledTitle>
                 Subscriber's Sign in
@@ -67,10 +64,10 @@ if (currentUser) {
 
                 <Error small red>{ error }</Error>
 
-                <Button label={ loading ? "Processing..." : "Sign in" }
+                <Button label="Sign in"
                     type="submit"
                     notTransparent
-                    disabled={ loading }
+                    loading={ loading }
                 />
             </Form>
 
@@ -102,14 +99,13 @@ const Root = styled.div`
     justify-content: center;
     width: 400px;
     margin: 0 auto;
-    height: 100%;
+    min-height: 100%;
     align-items: center;
     flex-direction: column;
 
     @media(max-width: ${ ({ theme }) => theme.tabletBreakpoint }) {
         width: 80%;
-        margin: 24px auto;
-        justify-content: flex-start;
+        margin: 0 auto;
     }
 `;
 

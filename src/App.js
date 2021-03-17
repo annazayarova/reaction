@@ -13,7 +13,6 @@ import PasswordReset from "./pages/PasswordReset";
 import PrivateRoute from "./PrivateRoute";
 import SignUp from "./pages/SignUp";
 import Tenant from "./pages/Tenant";
-import Payment from "./pages/Payment";
 
 const App = () => {
     const [ theme, setTheme ] = useState('light');
@@ -41,10 +40,6 @@ const App = () => {
 
                         <Route exact path="/signup">
                             <SignUp />
-                        </Route>
-
-                        <Route exact path="/payment">
-                            <Payment />
                         </Route>
 
                         <Route exact path="/passwordReset">

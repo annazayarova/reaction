@@ -1,8 +1,9 @@
-import React, { useState, useRef } from 'react';
+import React, { useRef, useContext } from 'react';
 import styled from 'styled-components';
 
 import NavigationLink from './NavigationLink';
 import Text from '../components/common/Text';
+import { AuthContext } from '../Auth';
 
 const Navigation = ({
     categories,
@@ -11,13 +12,18 @@ const Navigation = ({
     activeLink
 }) => {
     const headerRef = useRef(null);
+    const { currentUser } = useContext(AuthContext);
 
-    if (!categories.length) {
+    if (!categories.length && currentUser) {
         return (
         <StyledText grey small>
-            Start by creating the very first category by clicking + button at the right top corner
+            The menu is empty. Start creating categories by clicking + button at the right top corner
         </StyledText>
         )
+    }
+
+    if (!categories.length) {
+        return <StyledText grey small>The menu is empty</StyledText>;
     }
 
     return (
@@ -39,6 +45,7 @@ export default Navigation;
 
 const StyledText = styled(Text)`
     margin: 24px;
+    text-align: center;
 `;
 
 const Root = styled.div`

@@ -2,19 +2,25 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Block = ({
-    className,
-    children,
+    bold,
     center = false,
-    separate = false,
+    children,
+    className,
+    disabled,
+    noBorder,
     onClick,
-    noBorder
+    red,
+    separate = false
 }) => {
     return (
-        <Root className={ className }
+        <Root bold={ bold }
             center={ center }
-            separate={ separate }
-            onClick={ onClick }
+            className={ className }
+            disabled={ disabled }
             noBorder={ noBorder }
+            onClick={ onClick }
+            red={ red }
+            separate={ separate }
         >
             { children }
         </Root>
@@ -27,6 +33,15 @@ const Root  = styled.div`
     align-items: center;
     border-top: 1px solid ${ ({ theme, separate, noBorder }) => separate ? theme.separator :  noBorder ? 'transparent' : theme.border };
     display: flex;
+    font-family: ${ ({ bold }) => bold ? 'bold' : '' };
+    font-size: 15px;
+    line-height: 20px;
     justify-content: ${ ({ center }) => center ? 'center' : 'space-between' };
     padding: 16px 24px;
+    text-align: center;
+    pointer-events: ${ ({ disabled }) => disabled ? 'none' : '' };
+    color: ${ ({ disabled, red, theme }) =>
+        disabled ? theme.disabled :
+        red ? theme.red : theme.text
+    };
 `;

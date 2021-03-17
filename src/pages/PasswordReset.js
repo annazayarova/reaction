@@ -1,5 +1,5 @@
 import { withRouter } from "react-router";
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
@@ -11,9 +11,14 @@ import Text from '../components/common/Text';
 import Title from '../components/common/Title';
 
 const PasswordReset = ({ history }) => {
+    const [ loading, setLoading ] = useState(false);
+    const [ error, setError ] = useState(null);
+
 	const handlePasswordReset = useCallback(
 		async event => {
-			event.preventDefault();
+            event.preventDefault();
+            setLoading(true);
+
 			const { email } = event.target.elements;
 
 			try {
@@ -23,7 +28,8 @@ const PasswordReset = ({ history }) => {
 
 				history.push(loginRoute);
 			} catch (error) {
-				alert(error);
+                setLoading(false);
+				setError(error.message);
 			}
 		},
 	[history]
@@ -43,18 +49,26 @@ const PasswordReset = ({ history }) => {
 					notTransparent
                 />
 
+                <Error small red>{ error }</Error>
+
                 <Button label="Submit"
                     type="submit"
                     notTransparent
+                    loading={ loading }
                 />
             </Form>
 
-            <StyledText><StyledLink to={ loginRoute }>Back to login</StyledLink></StyledText>
+            <StyledText><StyledLink to={ loginRoute }>Back to Sign in</StyledLink></StyledText>
         </Root>
     );
 };
 
 export default withRouter(PasswordReset);
+
+const Error = styled(Text)`
+    margin-bottom: 12px;
+    float: right;
+`;
 
 const StyledInput = styled(Input)`
     margin-bottom: 24px;
@@ -86,4 +100,5 @@ const StyledText = styled(Text)`
 const StyledLink = styled(Link)`
     color: ${ ({ theme }) => theme.primary };
     text-decoration: underline;
+    font-family: bold;
 `;

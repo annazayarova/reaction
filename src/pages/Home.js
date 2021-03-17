@@ -100,6 +100,7 @@ const Login = styled(Create)`
 `;
 
 const Root = styled.div`
+    overflow-x: hidden;
 `;
 
 const Header = styled.div`

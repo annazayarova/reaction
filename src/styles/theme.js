@@ -38,6 +38,7 @@ export const lightTheme = {
 }
 
 export const darkTheme = {
+    whiteGrey: color.grey.whiteGrey,
     body: color.grey.grey9,
     border: color.grey.grey8,
     content: color.grey.grey10,

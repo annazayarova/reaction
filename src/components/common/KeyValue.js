@@ -39,5 +39,5 @@ const Root  = styled.div`
 `;
 
 const StyledText  = styled(Text)`
-    margin-right: 48px;
+    margin-right: 24px;
 `;

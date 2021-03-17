@@ -1,17 +1,15 @@
-import React, { useState, useEffect, useContext, useRef } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 
 import { AuthContext } from '../Auth';
 import Block from './common/Block';
-import Button from './common/Button';
 import Title from './common/Title';
 import db from '../services/firebase';
-import ModalFull from './common/ModalFull';
-import Toggle from './common/Toggle';
+import Modal from './common/Modal';
 import Text from './common/Text';
-import KeyValue from './common/KeyValue';
+import Input from './common/Input';
 import Items from './Items';
-
+import AddNewItem from './AddNewItem'
 import { ReactComponent as MoreIcon} from '../img/more.svg';
 
 const Category = ({
@@ -20,34 +18,56 @@ const Category = ({
     invisible,
     userId
 }) => {
-    const [ name, setName ] = useState(category.name || '')
+    const [ categoryName, setCategoryName ] = useState(category.name)
     const [ open, setOpen ] = useState(false);
-    const [ hiddenCategory, setHiddenCategory ] = useState(category.hidden || false);
+    const [ openEdit, setOpenEdit ] = useState(false);
+    const [ openHide, setOpenHide ] = useState(false);
+    const [ openDelete, setOpenDelete ] = useState(false);
+    const [ openAddItem, setOpenAddItem ] = useState(false);
 
     const { currentUser } = useContext(AuthContext);
 
+    const docRef = currentUser && db.firestore()
+    .collection('users')
+    .doc(currentUser.uid)
+    .collection('categories');
+
     const updateCategory = () => {
-        db.firestore()
-        .collection('users')
-        .doc(currentUser.uid)
-        .collection('categories')
+        docRef
         .doc(category.id).set({
-            name: name,
-            hidden: hiddenCategory
+            name: categoryName
         }, { merge: true })
 
-        setOpen(false);
+        setOpenEdit(false);
+    };
+
+    const hideCategory = () => {
+        docRef
+        .doc(category.id).set({
+            hidden: !category.hidden
+        }, { merge: true })
+
+        setOpenHide(false);
+    };
+
+    const deleteCategory = () => {
+        docRef
+        .doc(category.id)
+        .delete()
+
+        //todo delete filteredItems of deleted catigory
+        setOpenDelete(false);
     };
 
     const filteredItems = items.filter(item => item.categoryId === category.id);
 
     useEffect(() => {
-        if (open) {
-            setName(category.name);
+        if (openEdit) {
+            setCategoryName(category.name);
         }
-    }, [category.name, open]);
+    }, [category.name, openEdit]);
 
-    if (hiddenCategory && currentUser?.uid !== userId) {
+    if (category.hidden === true && currentUser?.uid !== userId) {
         return null;
     }
 
@@ -55,7 +75,7 @@ const Category = ({
         <Root>
             <>
                 <CategoryName invisible={ invisible }>
-                    <StyledTitle hiddenCategory={ hiddenCategory }>
+                    <StyledTitle disabled={ !!category.hidden }>
                         { category.name }
                     </StyledTitle>
 
@@ -64,48 +84,106 @@ const Category = ({
                     }
                 </CategoryName>
 
+                { currentUser && currentUser.uid === userId && filteredItems.length === 0 && !invisible &&
+                    <StyledText small grey>
+                        No items yet. To add items click on + button at the right top corner or use menu of each category
+                    </StyledText>
+                }
+
                 <Items items={ filteredItems }
                     hiddenCategory={ category.hidden }
                     userId={ userId }
                 />
             </>
 
-            { open && <ModalFull disabled={ !Boolean(name) }
-                open={ open }
-                onClose={ () => setOpen(false) }
+            { open &&
+                <Modal title="Category"
+                    onClose={ () => setOpen(false) }
+                >
+                    <Block center
+                        onClick={ () => (setOpenAddItem(true), setOpen(false)) }
+                    >
+                        Add item
+                    </Block>
+
+                    <Block center
+                        onClick={ () => (setOpenEdit(true), setOpen(false)) }
+                    >
+                        Edit
+                    </Block>
+
+                    <Block center
+                        onClick={ () => (setOpenHide(true), setOpen(false)) }
+                    >
+                        { category.hidden === true ? 'Show' : 'Hide' }
+                    </Block>
+
+                    <Block center red bold
+                        onClick={ () => (setOpenDelete(true), setOpen(false)) }
+                    >
+                        Delete
+                    </Block>
+                </Modal>
+            }
+
+            { openEdit && <Modal onClose={ () => setOpenEdit(false) }
                 title="Edit category"
-                onSave={ updateCategory }
             >
                 <Block>
-                    <KeyValue hidden={ hiddenCategory }
-                        value={ name }
-                        label="Name"
-                        onChange={ (e) => setName(e.target.value) }
+                    <Input value={ categoryName }
+                        onChange={ (e) => setCategoryName(e.target.value) }
+                        placeholder="Category name"
+                        autoFocus
+                        center
                     />
                 </Block>
 
-                <Block>
-                    <Text>{ !hiddenCategory ? 'Hide category' : 'Show category' } </Text>
-
-                    <Toggle checked={ hiddenCategory }
-                        onChange={ () => setHiddenCategory(!hiddenCategory) }
-                    />
+                <Block bold center
+                    onClick={ updateCategory }
+                    disabled={ !categoryName || category.name === categoryName.trim() }
+                >
+                    Update
                 </Block>
+            </Modal> }
 
-                <Block>
-                    <Button regular
-                        label="Delete category"
-                        onClick={ () => db.firestore()
-                            .collection('users')
-                            .doc(currentUser.uid)
-                            .collection('categories')
-                            .doc(category.id)
-                            .delete()
-                        }
-                        red
-                    />
-                </Block>
-            </ModalFull> }
+            { openHide &&
+                <Modal onClose={ () => setOpenHide(false) }
+                    title={ category.hidden === true ? 'Show category?' : 'Hide category?'}
+                >
+                    <Block center>
+                        <Text small>The category with all its items will be { category.hidden === true ? 'visible' : 'invisible'} to customers</Text>
+                    </Block>
+
+                    <Block center bold
+                        onClick={ hideCategory }
+                    >
+                        { category.hidden === true ? 'Show' : 'Hide'}
+                    </Block>
+                </Modal>
+            }
+
+            { openDelete &&
+                <Modal onClose={ () => setOpenDelete(false) }
+                    title='Delete category?'
+                >
+                    <Block center>
+                        <Text small>The category with all its items will be deleted</Text>
+                    </Block>
+
+                    <Block center bold red
+                        onClick={ deleteCategory }
+                    >
+                        Delete
+                    </Block>
+                </Modal>
+            }
+
+            { openAddItem &&
+                <AddNewItem categoryId={ category.id }
+                    onClose={ () => setOpenAddItem(false) }
+                    categoryName={ category.name }
+                />
+            }
         </Root>
     );
 }
@@ -113,6 +191,8 @@ const Category = ({
 export default Category;
 
 const Root = styled.div`
+    max-width: 600px;
+    margin: 0 auto;
 `;
 
 const StyledMoreIcon = styled(MoreIcon)`
@@ -128,7 +208,6 @@ const StyledMoreIcon = styled(MoreIcon)`
 
 const StyledTitle = styled(Title)`
     text-transform: uppercase;
-    text-decoration: ${ ({ hiddenCategory }) => hiddenCategory ? 'line-through' : 'none' };
 `;
 
 const CategoryName = styled.div`
@@ -136,4 +215,8 @@ const CategoryName = styled.div`
     display: ${ ({ invisible }) => invisible ? 'none' : 'flex' };
     justify-content: space-between;
     padding: 24px;
+`;
+
+const StyledText = styled(Text)`
+    padding: 0 24px 24px;
 `;

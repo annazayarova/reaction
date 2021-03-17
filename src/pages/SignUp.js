@@ -9,7 +9,6 @@ import Button from '../components/common/Button';
 import Input from '../components/common/Input';
 import Title from '../components/common/Title';
 import Text from '../components/common/Text';
-import ReactionHeader from '../components/common/ReactionHeader';
 import RadioInput from '../components/common/RadioInput';
 
 const SignUp = () => {
@@ -71,8 +70,6 @@ const SignUp = () => {
 
     return (
         <>
-        <ReactionHeader />
-
         <Root>
             <StyledTitle>
                 Subscribe to create menu
@@ -82,7 +79,7 @@ const SignUp = () => {
                 <StyledInput autoFocus
                     name="displayName"
                     type="text"
-                    placeholder="Property name"
+                    placeholder="Business name"
                     notTransparent
                     value={ displayName }
                     onChange={ (e) => setDisplayName(e.target.value) }
@@ -119,7 +116,7 @@ const SignUp = () => {
                 <Button label={ loading ? "Processing..." : "Subscribe" }
                     type="submit"
                     notTransparent
-                    disabled={ loading }
+                    loading={ loading }
                 />
             </form>
 
@@ -158,6 +155,8 @@ const Radios = styled.div`
 
 const StyledText = styled(Text)`
     margin-top: 24px;
+    text-align: center;
+    width: 100%;
 `;
 
 const StyledTitle = styled(Title)`
@@ -169,13 +168,12 @@ const Root = styled.div`
     justify-content: center;
     width: 400px;
     margin: 0 auto;
-    height: 100%;
+    min-height: 100%;
     align-items: center;
     flex-direction: column;
 
     @media(max-width: ${ ({ theme }) => theme.tabletBreakpoint }) {
-        justify-content: flex-start;
-        margin: 24px auto;
+        margin: 0 auto;
         width: 80%;
     }
 `;

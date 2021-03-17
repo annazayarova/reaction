@@ -32,7 +32,7 @@ const Navigation = ({
                     <StyledText uppercase
                         small
                         key={ category.id }
-                        lineThrough={ category.hidden }
+                        disabled={ category.hidden }
                     >
                         { category.name }
                     </StyledText>
