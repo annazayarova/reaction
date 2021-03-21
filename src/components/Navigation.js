@@ -7,9 +7,7 @@ import { AuthContext } from '../Auth';
 
 const Navigation = ({
     categories,
-    invisible,
-    navigationRef,
-    activeLink
+    invisible
 }) => {
     const headerRef = useRef(null);
     const { currentUser } = useContext(AuthContext);
@@ -33,8 +31,6 @@ const Navigation = ({
             { categories && categories.map((category) => (
                 <NavigationLink category={ category }
                     key={ category.id }
-                    activeLink={ activeLink }
-                    navigationRef={ navigationRef }
                 />
             )) }
         </Root>

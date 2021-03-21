@@ -72,7 +72,7 @@ const Category = ({
     }
 
     return (
-        <Root>
+        <Root id={ category.id }>
             <>
                 <CategoryName invisible={ invisible }>
                     <StyledTitle disabled={ !!category.hidden }>
@@ -198,6 +198,7 @@ const Root = styled.div`
 const StyledMoreIcon = styled(MoreIcon)`
     width: 20px;
     height: 20px;
+    cursor: pointer;
 
     path {
         &:last-of-type {

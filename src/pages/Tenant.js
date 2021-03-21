@@ -15,7 +15,7 @@ const Tenant = ({
 	onToggleTheme
 }) => {
 
-	const [ displayName, setDisplayName ] = useState('');
+	const [ businessName, setBusinessName ] = useState('');
 	const [ categories, setCategories ] = useState([]);
 	const [ items, setItems ] = useState([]);
 	const [ searchTerm, setSearchTerm ] = useState('');
@@ -35,9 +35,9 @@ const Tenant = ({
 	const docRef = db.firestore().collection("users").doc(idFromUrl);
 
 	useEffect(() => {
-		docRef.get().then(doc => {
-			if (doc.exists) {
-				setDisplayName(doc.data().displayName);
+		docRef.get().then(snapshot => {
+			if (snapshot.exists) {
+				setBusinessName(snapshot.data().displayName);
 			} else {
 				// doc.data() will be undefined in this case
 				console.log("No such document!");
@@ -45,7 +45,9 @@ const Tenant = ({
 		}).catch(function(error) {
 			console.log("Error getting document:", error);
 		});
-
+	},[ businessName ]);
+console.log(businessName)
+	useEffect(() => {
 		docRef
 		.collection('categories')
 		.orderBy('timestamp', 'asc')
@@ -79,20 +81,15 @@ const Tenant = ({
 			|| item.description.toLowerCase().includes(searchTerm.toLocaleLowerCase())
 		);
 
-	const refs = categories.reduce((acc, value) => {
-		acc[value.id] = React.createRef();
-		return acc;
-	}, {});
-
     return (
         <Root>
 			<Wrap>
 				<HeaderOfUser userId={ idFromUrl }
 					categories={ categories }
-					displayName={ displayName }
+					businessName={ businessName }
 				/>
 
-				<Header displayName={ displayName }
+				<Header businessName={ businessName }
 					theme={ theme }
 					onToggleTheme={ onToggleTheme }
                     themeToggled={ themeToggled }

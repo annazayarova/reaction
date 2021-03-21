@@ -6,7 +6,7 @@ import Settings from './Settings';
 import Title from './common/Title';
 
 const Header = ({
-    displayName,
+    businessName,
     onSearchChange,
     resetSearch,
     onToggleTheme,
@@ -25,7 +25,7 @@ const Header = ({
             />
 
             <StyledTitle medium>
-                { displayName }
+                { businessName }
             </StyledTitle>
 
             <Search value={ searchValue }
@@ -45,7 +45,6 @@ const Root  = styled.div`
     display: flex;
     justify-content: space-between;
     height: 64px;
-    position: relative;
     width: 100%;
     position: sticky;
     top: 0;

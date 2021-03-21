@@ -60,6 +60,7 @@ const StyledSearchIcon  = styled(SearchIcon)`
 const StyledCloseIcon  = styled(CloseIcon)`
     width: 24px;
     height: 24px;
+    cursor: pointer;
 
     path {
         &:last-of-type {
@@ -85,6 +86,7 @@ const InputWrapper  = styled.div`
 `;
 
 const Icon  = styled.div`
+    cursor: pointer;
     width: 64px;
     height: 64px;
     align-items: center;

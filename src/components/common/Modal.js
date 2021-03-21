@@ -84,7 +84,7 @@ const Root  = styled.div`
     flex-direction: column;
     height: auto;
     height: auto;
-    max-width: 600px;
+    max-width: 360px;
     position: relative;
     transition: ${ ({ theme }) => theme.transition };
     width: 80%;

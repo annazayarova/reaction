@@ -24,12 +24,3 @@
     font-style: normal;
     font-display: swap;
     }
-
-    @font-face {
-    font-family: light;
-    src: url('./fonts/ApercuPro-Light.woff2') format('woff2'),
-        url('./fonts/ApercuPro-Light.woff') format('woff');
-    font-weight: 300;
-    font-style: normal;
-    font-display: swap;
-    }

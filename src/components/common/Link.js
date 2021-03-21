@@ -26,6 +26,7 @@ const StyledText = styled(Text)`
 `;
 
 const Root = styled.button`
+    cursor: pointer;
     align-items: center;
     display: flex;
     border: none;

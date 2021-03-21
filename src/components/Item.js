@@ -149,12 +149,12 @@ const Item = ({
 
             { openHide &&
                 <Modal onClose={ () => setOpenHide(false) }
-                    title={ !!item.hidden ? 'Show item?' : 'Hide item?'}
+                    title={ item.hidden ? 'Show item?' : 'Hide item?'}
                 >
                     <Block center bold
                         onClick={ hideItem }
                     >
-                        { !!item.hidden ? 'Show' : 'Hide'}
+                        { item.hidden ? 'Show' : 'Hide'}
                     </Block>
                 </Modal>
             }
@@ -184,6 +184,7 @@ const Root = styled.div`
 const StyledMoreIcon = styled(MoreIcon)`
     width: 20px;
     height: 20px;
+    cursor: pointer;
 
     path {
         &:last-of-type {

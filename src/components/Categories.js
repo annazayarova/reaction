@@ -3,10 +3,10 @@ import styled from 'styled-components';
 
 import Category from './Category';
 
-const Categories = ({ 
-    categories, 
-    items, 
-    invisible, 
+const Categories = ({
+    categories,
+    items,
+    invisible,
     userId
 }) => {
     return (

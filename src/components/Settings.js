@@ -1,10 +1,9 @@
 import { Link } from "react-router-dom";
 import { ReactComponent as MenuIcon } from '../img/menu.svg';
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 
-import { AuthContext } from '../Auth';
 import Block from './common/Block';
 import Languages from './Languages';
 import Slider from './common/Slider';
@@ -70,6 +69,7 @@ const Root  = styled.div`
 `;
 
 const Menu  = styled.div`
+    cursor: pointer;
     width: 64px;
     height: 64px;
     align-items: center;

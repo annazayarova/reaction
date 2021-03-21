@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useCallback } from 'react';
 import styled from 'styled-components';
 import QRCode from 'qrcode.react';
 
@@ -8,16 +8,16 @@ import { ReactComponent as UserIcon } from '../img/account.svg';
 import Block from './common/Block';
 import Modal from './common/Modal';
 import ModalFull from './common/ModalFull';
-import Text from './common/Text';
 import db from '../services/firebase';
 import KeyValue from './common/KeyValue';
 
-const AddButton = ({
+const ProfileButton = ({
     className,
-    displayName
+    businessName
 }) => {
     const [ open, setOpen ] = useState(false);
     const [ openEdit, setOpenEdit ] = useState(false);
+    const [ name, setName ] = useState(businessName || '');
 
     const { currentUser } = useContext(AuthContext);
 
@@ -30,16 +30,17 @@ const AddButton = ({
         db.auth().signOut();
     };
 
-    const updateProfile = () => {
+    const updateProfile = useCallback(() => {
+        console.log(name)
         currentUser && db.firestore()
         .collection('users')
         .doc(currentUser.uid)
         .set({
-            displayName: displayName
+            displayName: name
         }, { merge: true })
 
         setOpenEdit(false);
-    };
+    },[]);
 
     const url = window.location.href;
 
@@ -90,14 +91,15 @@ const AddButton = ({
 
             { openEdit &&
                 <ModalFull onClose={ () => setOpenEdit(false) }
-                    disabled={ !displayName }
+                    disabled={ !businessName }
                     title="Edit profile"
                     onSave={ updateProfile }
                 >
                     <Block>
-                        <KeyValue value={ displayName }
+                        <KeyValue value={ name }
                             label="Name"
-                            //onChange={ (e) => setName(e.target.value) }
+                            onChange={ (e) => setName(e.target.value) }
+                            autoFocus
                         />
                     </Block>
             </ModalFull> }
@@ -105,7 +107,7 @@ const AddButton = ({
     );
 }
 
-export default AddButton;
+export default ProfileButton;
 
 const Root = styled.div`
     align-items: center;
@@ -120,6 +122,7 @@ const StyledQRCode = styled(QRCode)`
 `;
 
 const StyledUserIcon = styled(UserIcon)`
+    cursor: pointer;
     width: 24px;
     height: 24px;
 

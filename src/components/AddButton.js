@@ -80,6 +80,7 @@ const Root = styled.div`
 `;
 
 const StyledAddIcon = styled(AddIcon)`
+    cursor: pointer;
     width: 24px;
     height: 24px;
 

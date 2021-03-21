@@ -62,6 +62,7 @@ const StyledCloseIcon = styled(CloseIcon)`
     width: 20px;
     height: 20px;
     z-index: 11;
+    cursor: pointer;
 
     path {
         &:last-of-type {
@@ -89,11 +90,12 @@ const Window  = styled.div`
 const Root  = styled.div`
     background-color: ${ ({ theme }) => theme.body };
     min-height: 100vh;
-    width: calc(100% - 64px);
+    width: 360px;
     position: relative;
     transform: ${ ({ open }) => (open ? 'translateX(0)' : 'translateX(-100%)') };
     transition: ${ ({ theme }) => theme.transition };
-`;
 
-const StyledTitle  = styled(Title)`
+    @media(max-width: ${ ({ theme }) => theme.tabletBreakpoint }) {
+        width: 80%;
+    }
 `;
