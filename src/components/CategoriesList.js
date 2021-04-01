@@ -60,7 +60,7 @@ const StyledActiveIcon = styled(ActiveIcon)`
 
     path {
         &:last-of-type {
-            fill: ${ ({ theme }) => theme.primary }
+            fill: ${ ({ theme }) => theme.text }
         }
     }
 `;

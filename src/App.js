@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 import { ThemeProvider } from 'styled-components';
 import React, { useState } from "react";
 
@@ -34,11 +34,11 @@ const App = () => {
                             <Home />
                         </Route>
 
-                        <Route exact path="/signin">
+                        <Route path="/signin">
                             <SignIn />
                         </Route>
 
-                        <Route exact path="/signup">
+                        <Route path="/signup">
                             <SignUp />
                         </Route>
 
@@ -53,9 +53,7 @@ const App = () => {
                             />
                         </Route>
 
-                        <Route path="*">
-                            <NoMatchPage />
-                        </Route>
+                        <Route component={ NoMatchPage } />
                     </Switch>
                 </Router>
             </ThemeProvider>

@@ -10,6 +10,7 @@ import CategoriesList from './CategoriesList';
 import ModalFull from './common/ModalFull';
 import Text from './common/Text';
 import Textarea from './common/Textarea';
+import Toggle from './common/Toggle';
 
 const AddNewItem = ({
     categories,
@@ -23,6 +24,7 @@ const AddNewItem = ({
     const [ price, setPrice ] = useState('');
     const [ description, setDescription ] = useState('');
     const [ activeCategoryId, setActiveCategoryId ] = useState(initialActiveCategoryId);
+    const [ vegan, setVegan ] = useState(false);
 
     const { currentUser } = useContext(AuthContext);
 
@@ -38,6 +40,7 @@ const AddNewItem = ({
             categoryId: categoryId ? categoryId : activeCategoryId,
             price,
             description,
+            vegan,
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
         });
 
@@ -73,6 +76,14 @@ const AddNewItem = ({
                     />
                 </Block>
 
+                <StyledBlock>
+                    <Text bold>Description</Text>
+
+                    <Textarea value={ description }
+                        onChange={ (e) => setDescription(e.target.value) }
+                    />
+                </StyledBlock>
+
                 <Block>
                     <CategoryBlock>
                         <StyledText bold>
@@ -89,9 +100,10 @@ const AddNewItem = ({
                 </Block>
 
                 <Block>
-                    <Textarea value={ description }
-                        onChange={ (e) => setDescription(e.target.value) }
-                        placeholder="Description"
+                    <Text bold>Vegetarian or Vegan</Text>
+
+                    <Toggle checked={ vegan }
+                        onChange={ () => setVegan(!vegan) }
                     />
                 </Block>
         </ModalFull>
@@ -106,4 +118,13 @@ const CategoryBlock = styled.div`
 
 const StyledText = styled(Text)`
     margin-right: 24px;
+`;
+
+const StyledBlock = styled(Block)`
+    flex-direction: column;
+    align-items: flex-start;
+
+    ${ Text } {
+        margin-bottom: 12px;
+    }
 `;

@@ -5,8 +5,7 @@ import _uniqueId from 'lodash/uniqueId';
 const Toggle = ({
     className,
     onChange,
-    checked,
-    label
+    checked
 }) => {
     const [ id ] = useState(_uniqueId('prefix-'));
 
@@ -65,7 +64,7 @@ const CheckBox = styled.input`
     z-index: 1;
 
     &:checked + ${ CheckBoxLabel } {
-        background: ${ ({ theme }) => theme.navigationBackground };
+        background: ${ ({ theme }) => theme.primary };
 
         &::after {
             border-radius: 50%;

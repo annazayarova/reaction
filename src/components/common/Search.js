@@ -36,7 +36,9 @@ const Search = ({
                         autoFocus
                     />
 
-                    <StyledCloseIcon onClick={ handleClose } />
+                    <Close>
+                        <StyledCloseIcon onClick={ handleClose } />
+                    </Close>
                 </InputWrapper>
             }
 
@@ -57,11 +59,13 @@ const StyledSearchIcon  = styled(SearchIcon)`
     }
 `;
 
-const StyledCloseIcon  = styled(CloseIcon)`
+const Close  = styled.div`
     width: 24px;
     height: 24px;
     cursor: pointer;
+`;
 
+const StyledCloseIcon  = styled(CloseIcon)`
     path {
         &:last-of-type {
             fill: ${ ({ theme }) => theme.text }

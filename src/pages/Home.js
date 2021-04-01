@@ -47,7 +47,7 @@ const Home = () => {
                 </StyledTitle>
 
                 <StyledText big grey medium>
-                    For your restaurant, coffee shop, bar or hotel
+                    For your restaurant, bar or hotel
                 </StyledText>
 
                 <Create to='/signup'>

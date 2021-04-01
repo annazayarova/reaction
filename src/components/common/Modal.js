@@ -39,6 +39,7 @@ const JSX_MODAL = ({
 
                     <Block onClick={ onClose }
                         center
+                        noBorder
                     >
                         Cancel
                     </Block>

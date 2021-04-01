@@ -41,6 +41,7 @@ export const GlobalStyle = createGlobalStyle`
         margin: 0;
         padding: 0;
         transition: all 0.15s linear;
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
     }
 
     html,
@@ -48,7 +49,6 @@ export const GlobalStyle = createGlobalStyle`
     #root {
         height: 100%;
         width: 100%;
-    }
 
     img, svg {
         width: 100%;

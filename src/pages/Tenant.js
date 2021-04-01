@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import { useLocation } from "react-router-dom";
 import Categories from '../components/Categories';
@@ -8,6 +8,9 @@ import Header from '../components/Header';
 import HeaderOfUser from '../components/HeaderOfUser';
 import Navigation from '../components/Navigation';
 import NotFound from '../components/common/NotFound';
+import Intro from '../components/Intro';
+import Skeleton from '../components/common/Loadings/Skeleton';
+import { AuthContext } from '../Auth';
 
 const Tenant = ({
     theme,
@@ -19,6 +22,10 @@ const Tenant = ({
 	const [ categories, setCategories ] = useState([]);
 	const [ items, setItems ] = useState([]);
 	const [ searchTerm, setSearchTerm ] = useState('');
+	const [ notFound, setNotFound ] = useState(false);
+	const [ loading, setLoading ] = useState(true);
+
+	const { currentUser } = useContext(AuthContext);
 
 	let location = useLocation();
 	const url = location.pathname;
@@ -35,23 +42,11 @@ const Tenant = ({
 	const docRef = db.firestore().collection("users").doc(idFromUrl);
 
 	useEffect(() => {
-		docRef.get().then(snapshot => {
-			if (snapshot.exists) {
-				setBusinessName(snapshot.data().displayName);
-			} else {
-				// doc.data() will be undefined in this case
-				console.log("No such document!");
-			}
-		}).catch(function(error) {
-			console.log("Error getting document:", error);
-		});
-	},[ businessName ]);
-console.log(businessName)
-	useEffect(() => {
 		docRef
 		.collection('categories')
 		.orderBy('timestamp', 'asc')
 		.onSnapshot(snapshot => {
+			setLoading(false);
 			setCategories(snapshot.docs.map(doc => ({
 				hidden: doc.data().hidden,
 				id: doc.id,
@@ -63,15 +58,27 @@ console.log(businessName)
 		.collection('items')
 		.orderBy('timestamp', 'asc')
 		.onSnapshot(snapshot => {
-			setItems(snapshot.docs.map(doc => ({
-				categoryId:  doc.data().categoryId,
-				description:  doc.data().description,
-				hidden: doc.data().hidden,
-				id: doc.id,
-				name: doc.data().name,
-				price:  doc.data().price
-			}) ))
+				setLoading(false);
+				setItems(snapshot.docs.map(doc => ({
+					categoryId:  doc.data().categoryId,
+					description:  doc.data().description,
+					hidden: doc.data().hidden,
+					id: doc.id,
+					name: doc.data().name,
+					price:  doc.data().price,
+					vegan: doc.data().vegan
+				}) ))
 		})
+
+		docRef.get().then((doc) => {
+			if (doc.exists) {
+				setBusinessName(doc.data().displayName);
+			} else {
+				setNotFound(true);
+			}
+		}).catch((error) => {
+			console.log("Error getting document:", error);
+		});
 	}, []);
 
 	const searchItems = !searchTerm
@@ -81,8 +88,8 @@ console.log(businessName)
 			|| item.description.toLowerCase().includes(searchTerm.toLocaleLowerCase())
 		);
 
-    return (
-        <Root>
+	return (
+		<Root user={ currentUser && currentUser.uid === idFromUrl }>
 			<Wrap>
 				<HeaderOfUser userId={ idFromUrl }
 					categories={ categories }
@@ -92,28 +99,33 @@ console.log(businessName)
 				<Header businessName={ businessName }
 					theme={ theme }
 					onToggleTheme={ onToggleTheme }
-                    themeToggled={ themeToggled }
+					themeToggled={ themeToggled }
 					onSearchChange={ handleSearchChange }
 					searchValue={ searchTerm }
 					resetSearch={ handleSearchReset }
 					userId={ idFromUrl }
 				/>
 
-				<Navigation categories={ categories }
-					invisible={ searchTerm }
-				/>
+				{ loading ? <Skeleton /> :
+					<>
+						<Navigation categories={ categories }
+							invisible={ searchTerm }
+							userId={ idFromUrl }
+						/>
 
-				{ searchTerm.length > 0 && !searchItems.length > 0 && (
-					<NotFound text="Try searching by item's name or description"
-						title="No results found"
-					/>
-				) }
+						{ searchTerm.length > 0 && !searchItems.length > 0 && (
+							<NotFound text="Try searching by item's name or description"
+								title="No results found"
+							/>
+						) }
 
-				<Categories categories={ categories }
-					items={ searchItems }
-					invisible={ searchTerm }
-					userId={ idFromUrl }
-				/>
+						<Categories categories={ categories }
+							items={ searchItems }
+							invisible={ searchTerm }
+							userId={ idFromUrl }
+						/>
+					</>
+				}
 			</Wrap>
 
 			<Footer />
@@ -125,7 +137,8 @@ export default Tenant;
 
 const Root = styled.div`
 	position: relative;
-	min-height: 100vh;
+	min-height: ${ ({ user }) =>  user ? 'calc(100vh - 128px)' : 'calc(100vh - 64px)' };
+	top: ${ ({ user }) =>  user ? '128px' : '64px' };
 `;
 
 const Wrap = styled.div`

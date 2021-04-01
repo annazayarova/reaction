@@ -1,16 +1,12 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { NavHashLink } from 'react-router-hash-link';
 import { Link } from 'react-scroll'
 
-import { tenantRoute } from '../helpers/routes';
 import { AuthContext } from '../Auth';
 import Text from './common/Text';
 
 const Navigation = ({
-    category,
-    activeLink,
-    navigationRef
+    category
 }) => {
     const { currentUser } = useContext(AuthContext);
 
@@ -20,7 +16,7 @@ const Navigation = ({
                 <StyledLink to={ category.id }
                     spy={ true }
                     smooth={ true }
-                    offset={ -152 }
+                    offset={ -128 }
                     >
                         <StyledText uppercase
                             small

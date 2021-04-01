@@ -35,21 +35,23 @@ const NewCategoryModal = ({
         <Modal onClose={ onClose }
             title="New category"
         >
-            <Block>
-                <Input value={ categoryName }
-                    onChange={ (e) => setCategoryName(e.target.value) }
-                    placeholder="Category name"
-                    autoFocus
-                    center
-                />
-            </Block>
+            <form onSubmit={ addCategory }>
+                <Block>
+                    <Input value={ categoryName }
+                        onChange={ (e) => setCategoryName(e.target.value) }
+                        placeholder="Category name"
+                        autoFocus
+                        center
+                    />
+                </Block>
 
-            <Block center bold uppercase
-                disabled={ !categoryName }
-                onClick={ addCategory }
-            >
-                Create
-            </Block>
+                <Block center bold uppercase
+                    disabled={ !categoryName }
+                    onClick={ addCategory }
+                >
+                    Create
+                </Block>
+            </form>
         </Modal>
     )
 }

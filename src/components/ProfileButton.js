@@ -1,15 +1,14 @@
-import React, { useState, useContext, useCallback } from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import QRCode from 'qrcode.react';
-
 
 import { AuthContext } from '../Auth';
 import { ReactComponent as UserIcon } from '../img/account.svg';
 import Block from './common/Block';
 import Modal from './common/Modal';
-import ModalFull from './common/ModalFull';
 import db from '../services/firebase';
-import KeyValue from './common/KeyValue';
+import Input from './common/Input';
+import ImageUpload from './common/ImageUpload';
 
 const ProfileButton = ({
     className,
@@ -17,7 +16,8 @@ const ProfileButton = ({
 }) => {
     const [ open, setOpen ] = useState(false);
     const [ openEdit, setOpenEdit ] = useState(false);
-    const [ name, setName ] = useState(businessName || '');
+    const [ name, setName ] = useState(businessName);
+    const [ openLogo, setOpenLogo ] = useState(false);
 
     const { currentUser } = useContext(AuthContext);
 
@@ -30,17 +30,20 @@ const ProfileButton = ({
         db.auth().signOut();
     };
 
-    const updateProfile = useCallback(() => {
-        console.log(name)
+    const updateBusinessName = () => {
         currentUser && db.firestore()
         .collection('users')
         .doc(currentUser.uid)
         .set({
-            displayName: name
+            displayName: name.trim()
         }, { merge: true })
 
         setOpenEdit(false);
-    },[]);
+    };
+
+    const saveLogo = () => {
+
+    };
 
     const url = window.location.href;
 
@@ -67,7 +70,13 @@ const ProfileButton = ({
                     <Block center
                         onClick={ () => (setOpenEdit(true), setOpen(false)) }
                     >
-                        Edit profile
+                        Edit business name
+                    </Block>
+
+                    <Block center
+                        onClick={ () => (setOpenEdit(true), setOpen(false)) }
+                    >
+                        Add logo
                     </Block>
 
                     <Block center
@@ -83,6 +92,7 @@ const ProfileButton = ({
 
                     <Block onClick={ handleLogout }
                         center
+                        bold
                     >
                         Sign out
                     </Block>
@@ -90,19 +100,34 @@ const ProfileButton = ({
             }
 
             { openEdit &&
-                <ModalFull onClose={ () => setOpenEdit(false) }
+                <Modal onClose={ () => setOpenEdit(false) }
                     disabled={ !businessName }
-                    title="Edit profile"
-                    onSave={ updateProfile }
+                    title="Edit name"
+                    onSave={ updateBusinessName }
                 >
                     <Block>
-                        <KeyValue value={ name }
-                            label="Name"
-                            onChange={ (e) => setName(e.target.value) }
-                            autoFocus
-                        />
+
                     </Block>
-            </ModalFull> }
+
+                    <Block bold center
+                    onClick={ updateBusinessName }
+                    disabled={ !name || businessName === name.trim() }
+                >
+                    Update
+                </Block>
+            </Modal> }
+
+            { openLogo &&
+                <Modal onClose={ () => setOpenLogo(false) }
+                    title="Add logo"
+                >
+                    <Block center bold
+                        onClick={ saveLogo }
+                    >
+                        Logo
+                    </Block>
+                </Modal>
+            }
         </Root>
     );
 }

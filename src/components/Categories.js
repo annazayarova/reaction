@@ -17,6 +17,7 @@ const Categories = ({
                     items={ items }
                     invisible={ invisible }
                     userId={ userId }
+                    categories={ categories }
                 />
             ))}
         </Root>

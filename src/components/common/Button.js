@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import React from 'react';
 
-import LoadingSpinner from './LoadingSpinner';
+import LoadingSpinner from './Loadings/LoadingSpinner';
 
 const Button = ({
     className,
@@ -38,7 +38,7 @@ const Root = styled.button`
     cursor: pointer;
     color: ${ ({ theme, red, notTransparent }) => red ? theme.red : notTransparent ? 'white' : theme.text };
     font-family: ${ ({ regular }) => regular ? 'regular' : 'bold' };
-    font-size: 15px;
+    font-size: 16px;
     height: ${ ({ notTransparent }) => notTransparent ? '56px' : 'auto'};
     margin: 0;
     outline: none;

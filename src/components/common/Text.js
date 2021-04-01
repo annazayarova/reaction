@@ -6,8 +6,8 @@ const Text = styled.p`
         primary ? theme.primary :
         grey ? theme.grey :
         disabled ? theme.disabled : theme.text };
-    font-size: 15px;
-    line-height: 22px;
+    font-size: 16px;
+    line-height: 20px;
     margin: 0;
     padding: 0;
     font-family: ${ ({ bold, medium }) => medium ? 'medium, Arial' : bold ? 'bold, Arial' : 'regular, Arial' };

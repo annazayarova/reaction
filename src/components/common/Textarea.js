@@ -4,12 +4,13 @@ import styled from 'styled-components';
 const Textarea = ({
     value,
     onChange,
-    placeholder
+    placeholder = "Write description here"
+
 }) => (
         <Root value={ value }
             onChange={ onChange }
             placeholder={ placeholder }
-            rows={ 5 }
+            rows={ 6 }
         />
 );
 
@@ -17,15 +18,15 @@ export default Textarea;
 
 const Root = styled.textarea`
     -webkit-appearance: none;
-    background: transparent;
+    background-color: transparent;
     border-radius: 0;
     border: none;
     color: ${ ({ theme, grey }) => grey ? theme.grey : theme.text };
-    font-size: 15px;
+    font-family: regular, Arial;
+    font-size: 16px;
     line-height: 20px;
     outline: none;
     padding: 0;
-    font-family: regular, Arial;
     width: 100%;
 
     ::placeholder {

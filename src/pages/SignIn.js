@@ -71,7 +71,7 @@ if (currentUser) {
                 />
             </Form>
 
-            <StyledText grey>or <StyledLink to="/signup">Subscribe</StyledLink> to create digital menu for your coffee shop, bar, hotel or restaurant</StyledText>
+            <StyledText grey>or <StyledLink to="/signup">Subscribe</StyledLink> to create digital menu for your restaurant, bar or hotel</StyledText>
 
             <StyledText><StyledLink to="/passwordReset">Forgot password?</StyledLink></StyledText>
         </Root>

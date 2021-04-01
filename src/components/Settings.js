@@ -75,7 +75,6 @@ const Menu  = styled.div`
     align-items: center;
     display: flex;
     justify-content: center;
-    border-right: 1px solid ${ ({ theme }) => theme.border };
 `;
 
 const StyledMenuIcon  = styled(MenuIcon)`

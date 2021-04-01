@@ -16,5 +16,6 @@ const db = firebase.initializeApp({
 
 firebase.performance();
 firebase.analytics();
+firebase.storage();
 
 export default db;

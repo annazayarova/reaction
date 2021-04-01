@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import styled from 'styled-components';
 import ReactDOM from "react-dom";
 
@@ -17,10 +17,24 @@ const JSX_MODAL = ({
 }) => {
 
     useLockBodyScroll();
+    
+    const ref = useRef();
+
+    const handleClick = (event) => {
+        if (ref.current.contains(event.target)) {
+            event.stopPropagation();
+
+            return;
+        }
+
+        onClose();
+    };
 
     return (
-        <Window open={ open }>
-            <Root open={ open }>
+        <Window onClick={ handleClick }>
+            <Root open={ open }
+                ref={ ref }
+            >
                 <Header>
                     <Close label="Cancel"
                         onClick={ onClose }
@@ -70,7 +84,7 @@ const Done  = styled(Button)`
 `;
 
 const Window  = styled.div`
-    background-color: ${ ({ theme }) => theme.content };
+    background-color: ${ ({ theme }) => theme.overlay };
     height: 100vh;
     left: 0;
     position: fixed;
@@ -78,9 +92,12 @@ const Window  = styled.div`
     width: 100vw;
     transition: ${ ({ theme }) => theme.transition };
     z-index: 3;
+    padding-top: 24px;
 `;
 
 const Root  = styled.div`
+    background-color: ${ ({ theme }) => theme.content };
+    border-radius: 8px 8px 0 0;
     width: 100%;
     min-height: 100%;
     position: relative;

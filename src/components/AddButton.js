@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { ReactComponent as AddIcon } from '../img/add.svg';
 import Block from './common/Block';
 import Modal from './common/Modal';
-import NewCategoryModal from './AddNewCategoryModal';
+import NewCategoryModal from './AddNewCategory';
 import AddNewItemModal from './AddNewItem';
 
 const AddButton = ({
@@ -44,13 +44,12 @@ const AddButton = ({
                         Category
                     </Block>
 
-                    { categories.length > 0 &&
                         <Block center
                             onClick={ handleOpenNewItem }
+                            disabled={ categories.length === 0 }
                         >
                             Item
                         </Block>
-                    }
                 </Modal>
             }
 

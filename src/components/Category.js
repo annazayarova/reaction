@@ -14,6 +14,7 @@ import { ReactComponent as MoreIcon} from '../img/more.svg';
 
 const Category = ({
     category,
+    categories,
     items,
     invisible,
     userId
@@ -27,13 +28,18 @@ const Category = ({
 
     const { currentUser } = useContext(AuthContext);
 
-    const docRef = currentUser && db.firestore()
+    const categoryRef = currentUser && db.firestore()
     .collection('users')
     .doc(currentUser.uid)
     .collection('categories');
 
+    const itemRef = currentUser && db.firestore()
+    .collection('users')
+    .doc(currentUser.uid)
+    .collection('items');
+
     const updateCategory = () => {
-        docRef
+        categoryRef
         .doc(category.id).set({
             name: categoryName
         }, { merge: true })
@@ -42,7 +48,7 @@ const Category = ({
     };
 
     const hideCategory = () => {
-        docRef
+        categoryRef
         .doc(category.id).set({
             hidden: !category.hidden
         }, { merge: true })
@@ -50,16 +56,19 @@ const Category = ({
         setOpenHide(false);
     };
 
+    const filteredItems = items.filter(item => item.categoryId === category.id);
+
     const deleteCategory = () => {
-        docRef
+        categoryRef
         .doc(category.id)
         .delete()
 
-        //todo delete filteredItems of deleted catigory
+        filteredItems.forEach(item =>
+            item.categoryId === category.id
+            && itemRef.doc(item.id).delete());
+
         setOpenDelete(false);
     };
-
-    const filteredItems = items.filter(item => item.categoryId === category.id);
 
     useEffect(() => {
         if (openEdit) {
@@ -75,13 +84,17 @@ const Category = ({
         <Root id={ category.id }>
             <>
                 <CategoryName invisible={ invisible }>
-                    <StyledTitle disabled={ !!category.hidden }>
+                    <Title disabled={ !!category.hidden }
+                        uppercase
+                    >
                         { category.name }
-                    </StyledTitle>
+                    </Title>
 
-                    { currentUser && currentUser.uid === userId &&
-                        <StyledMoreIcon onClick={ () => setOpen(true) } />
-                    }
+                    <div>
+                        { currentUser && currentUser.uid === userId &&
+                            <StyledMoreIcon onClick={ () => setOpen(true) } />
+                        }
+                    </div>
                 </CategoryName>
 
                 { currentUser && currentUser.uid === userId && filteredItems.length === 0 && !invisible &&
@@ -118,7 +131,7 @@ const Category = ({
                         { category.hidden === true ? 'Show' : 'Hide' }
                     </Block>
 
-                    <Block center red bold
+                    <Block center red
                         onClick={ () => (setOpenDelete(true), setOpen(false)) }
                     >
                         Delete
@@ -182,6 +195,7 @@ const Category = ({
                 <AddNewItem categoryId={ category.id }
                     onClose={ () => setOpenAddItem(false) }
                     categoryName={ category.name }
+                    categories={ categories }
                 />
             }
         </Root>
@@ -199,16 +213,13 @@ const StyledMoreIcon = styled(MoreIcon)`
     width: 20px;
     height: 20px;
     cursor: pointer;
+    transform: rotate(90deg);
 
     path {
         &:last-of-type {
             fill: ${ ({ theme }) => theme.text }
         }
     }
-`;
-
-const StyledTitle = styled(Title)`
-    text-transform: uppercase;
 `;
 
 const CategoryName = styled.div`

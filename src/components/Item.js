@@ -2,8 +2,10 @@ import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 
 import { ReactComponent as MoreIcon} from '../img/more.svg';
+import { ReactComponent as VeganIcon } from '../img/vegan.svg';
 
 import { AuthContext } from '../Auth';
+import AddToOrderButton from './AddToOrderButton';
 import Block from './common/Block';
 import db from '../services/firebase';
 import KeyValue from './common/KeyValue';
@@ -11,11 +13,13 @@ import Modal from './common/Modal';
 import ModalFull from './common/ModalFull';
 import Text from './common/Text';
 import Textarea from './common/Textarea';
+import Toggle from './common/Toggle';
 
 const Item = ({
     item,
     hiddenCategory,
-    userId
+    userId,
+    full = false
 }) => {
     const [ itemName, setItemName ] = useState(item.name || '')
     const [ price, setPrice ] = useState(item.price || '')
@@ -24,6 +28,8 @@ const Item = ({
     const [ openEdit, setOpenEdit ] = useState(false);
     const [ openHide, setOpenHide ] = useState(false);
     const [ openDelete, setOpenDelete ] = useState(false);
+    const [ expanded, setExpanded ] = useState(false);
+    const [ vegan, setVegan ] = useState(item.vegan || false);
 
     const { currentUser } = useContext(AuthContext);
 
@@ -37,7 +43,8 @@ const Item = ({
         .doc(item.id).set({
             name: itemName.trim(),
             price: price.trim(),
-            description: description.trim()
+            description: description.trim(),
+            vegan: !item.vegan
         }, { merge: true })
 
         setOpenEdit(false);
@@ -60,39 +67,59 @@ const Item = ({
         setOpenDelete(false);
     };
 
+    const handleMoreClick = (e) => {
+        e.stopPropagation();
+        setOpen(true)
+    }
     if ((item.hidden === true || hiddenCategory) && currentUser?.uid !== userId) {
         return null;
     }
 
     return (
-        <Root>
+        <Root onClick={ () => setExpanded(!expanded) }
+            full={ full }
+        >
             <Content>
-                <Left>
                     <Name bold
                         disabled={ !!item.hidden || hiddenCategory }
+                        expanded={ expanded }
                     >
                         { item.name }
                     </Name>
 
                     { item.description &&
-                        <Description disabled={ !!item.hidden || hiddenCategory }>
+                        <Description grey
+                            small
+                            expanded={ expanded }
+                            disabled={ !!item.hidden || hiddenCategory }
+                        >
                             { item.description }
                         </Description>
                     }
+            </Content>
 
-                    <Text disabled={ !!item.hidden || hiddenCategory }
-                        medium primary={ !(item.hidden || hiddenCategory) }
+            <Bottom>
+                <Left>
+                    <Price disabled={ !!item.hidden || hiddenCategory }
+                        small
+                        grey={ !(item.hidden || hiddenCategory) }
                     >
                         € { Number(item.price).toFixed(2) }
-                    </Text>
+                    </Price>
+
+                    { item.vegan && <Icon><StyledVeganIcon /></Icon> }
                 </Left>
 
                 <Right>
+                    <AddToOrderButton />
+
                     { currentUser && currentUser.uid === userId &&
-                        <StyledMoreIcon onClick={ () => setOpen(true) } />
+                        <More>
+                            <StyledMoreIcon onClick={ handleMoreClick } />
+                        </More>
                     }
                 </Right>
-            </Content>
+            </Bottom>
 
             { open &&
                 <Modal title="Item"
@@ -110,7 +137,7 @@ const Item = ({
                         { item.hidden === true ? 'Show' : 'Hide' }
                     </Block>
 
-                    <Block center red bold
+                    <Block center red
                         onClick={ () => (setOpenDelete(true), setOpen(false)) }
                     >
                         Delete
@@ -139,12 +166,21 @@ const Item = ({
                         />
                     </Block>
 
-                    <Block>
+                    <StyledBlock>
+                        <Text bold>Description</Text>
+
                         <Textarea value={ description }
-                            placeholder="Description"
                             onChange={ (e) => setDescription(e.target.value) }
                         />
-                    </Block>
+                    </StyledBlock>
+
+                    <Block>
+                        <Text bold>Vegetarian or Vegan</Text>
+
+                        <Toggle checked={ vegan }
+                            onChange={ () => setVegan(!vegan) }
+                        />
+                </Block>
             </ModalFull> }
 
             { openHide &&
@@ -177,14 +213,86 @@ const Item = ({
 export default Item;
 
 const Root = styled.div`
-    margin: 0 24px 24px;
+    margin: ${ ({ full }) => !full && '0 24px 24px' };
     background: ${ ({ theme }) => theme.content };
+    cursor: pointer;
+`;
+
+const StyledBlock = styled(Block)`
+    flex-direction: column;
+    align-items: flex-start;
+
+    ${ Text } {
+        margin-bottom: 12px;
+    }
+`;
+
+const Price = styled(Text)`
+    margin-right: 16px;
+    white-space: nowrap;
+`;
+
+const Name = styled(Text)`
+    margin-bottom: 4px;
+    white-space: ${ ({ expanded }) => expanded ? 'wrap' : 'nowrap' };
+    overflow: ${ ({ expanded }) => expanded ? 'auto' : 'hidden' };
+    text-overflow: ${ ({ expanded }) => expanded ? 'initial' : 'ellipsis' };
+    width: 100%;
+`;
+
+const Description = styled(Text)`
+    overflow: ${ ({ expanded }) => expanded ? 'auto' : 'hidden' };
+    text-overflow: ${ ({ expanded }) => expanded ? 'initial' : 'ellipsis' };
+    width: 100%;
+
+    ${ ({ expanded }) => !expanded && `
+        -webkit-line-clamp: 2;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+    `}
+`;
+
+const ItemInfo = styled.div`
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+`;
+
+const Bottom = styled.div`
+    align-items: center;
+    background: ${ ({ theme }) => theme.content };
+    border-top: 1px solid ${ ({ theme }) => theme.body };
+    display: flex;
+    height: 48px;
+    justify-content: space-between;
+`;
+
+const Left = styled.div`
+    align-items: center;
+    display: flex;
+    margin-left: 16px;
+`;
+
+const Right = styled.div`
+    align-items: center;
+    display: flex;
+`;
+
+const More = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 48px;
+    height: 48px;
+    cursor: pointer;
+    border-left: 1px solid ${ ({ theme }) => theme.body };
 `;
 
 const StyledMoreIcon = styled(MoreIcon)`
     width: 20px;
     height: 20px;
-    cursor: pointer;
+    transform: rotate(90deg);
 
     path {
         &:last-of-type {
@@ -193,48 +301,24 @@ const StyledMoreIcon = styled(MoreIcon)`
     }
 `;
 
-const Name = styled(Text)`
-    margin-bottom: 4px;
-`;
-
-const Description = styled(Text)`
-    margin-bottom: 4px;
-`;
-
-const Left = styled.div`
-    align-items: flex-start;
-    display: flex;
-    flex-direction: column;
-    max-width: calc(100% - 40px);
-`;
-
-const Right = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-`;
-
 const Content = styled.div`
-    display: flex;
-    justify-content: space-between;
     padding: 16px;
+    position: relative;
 
 `;
 
 const ImgContainer = styled.div`
     position: relative;
+    padding-left: 16px;
+    width: 40%;
+    display: ${ ({ expanded }) => expanded ? 'none' : 'block' };
+`;
 
-    &:after {
-        content: "";
-        display: block;
-        padding-bottom: 100%;
-    }
+const StyledVeganIcon = styled(VeganIcon)`
+    fill: ${ ({ theme }) => theme.green };
+`;
 
-    img {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
+const Icon = styled.div`
+    height: 24px;
+    width: 24px;
 `;

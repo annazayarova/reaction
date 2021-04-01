@@ -3,7 +3,11 @@ import styled from 'styled-components';
 
 import Item from './Item';
 
-const Items = ({ items, hiddenCategory, userId }) => {
+const Items = ({
+    items,
+    hiddenCategory,
+    userId
+}) => {
     return (
         <Root>
             { items.map(item => (

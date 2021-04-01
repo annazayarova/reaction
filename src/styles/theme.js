@@ -15,7 +15,9 @@ export const color = {
         grey9: '#37474f',
         grey10: '#263238',
     },
-    white: '#ffffff'
+    white: '#ffffff',
+    green: '#6abf69',
+    blue: '#5eb8ff'
 }
 
 export const lightTheme = {
@@ -26,6 +28,8 @@ export const lightTheme = {
     icon: color.grey.grey6,
     inverse: color.grey.grey10,
     grey: color.grey.grey7,
+    green: color.green,
+    blue: color.blue,
     text: color.grey.grey10,
     placeholder: color.grey.grey5,
     title: color.grey.grey10,
@@ -38,14 +42,15 @@ export const lightTheme = {
 }
 
 export const darkTheme = {
-    whiteGrey: color.grey.whiteGrey,
-    body: color.grey.grey9,
+    body: color.grey.grey10,
     border: color.grey.grey8,
-    content: color.grey.grey10,
+    content: color.grey.grey9,
     disabled: color.grey.grey3,
     icon: color.grey.grey6,
     inverse: color.grey.grey0,
     grey: color.grey.grey7,
+    blue: color.blue,
+    green: color.green,
     text: color.white,
     title: color.white,
     overlay: 'rgba(255,255,255,0.2)',

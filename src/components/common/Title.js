@@ -5,12 +5,13 @@ const Title = styled.h1`
         grey ? theme.grey :
         disabled ? theme.disabled : theme.text };
     text-align: left;
-    font-size: 17px;
+    font-size: 18px;
     line-height: 24px;
     font-family: ${ ({ medium }) => medium ? 'medium, Arial' : 'bold, Arial' };
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    text-transform: ${ ({ uppercase }) => uppercase && 'uppercase' };
 
 
     ${ ({ big }) => big && `

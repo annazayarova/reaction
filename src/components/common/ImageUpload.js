@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import styled from 'styled-components';
 
 import db from "../../services/firebase";
-import Text from '../common/Text';
+import Text from './Text';
 
-const StoryUpload = ({ userId }) => {
+const ImageUpload = ({ userId }) => {
     const [ image, setImage ] = useState(null);
     const [ url, setUrl ] = useState('');
     const [ inProgress, setInProgress ] = useState(0);
@@ -30,7 +30,7 @@ const StoryUpload = ({ userId }) => {
             },
             () => {
                 db.storage()
-                .ref('images')
+                .ref(`images/${ userId }/`)
                 .child(image.name)
                 .getDownloadURL()
                 .then(url => {
@@ -50,7 +50,7 @@ const StoryUpload = ({ userId }) => {
 
 			<button onClick={ handleUpload }>Submit</button>
 
-			<img src={ url || "https://via.placeholder.com/400x300"}
+			<img src={ url || "https://via.placeholder.com/400x300" }
 				alt="Reaction menu"
 				height="300"
 				width="400"
@@ -59,7 +59,7 @@ const StoryUpload = ({ userId }) => {
     );
 }
 
-export default StoryUpload;
+export default ImageUpload;
 
 const Root  = styled.div`
 

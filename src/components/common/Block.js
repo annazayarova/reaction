@@ -31,10 +31,10 @@ export default Block;
 
 const Root  = styled.div`
     align-items: center;
-    border-top: 1px solid ${ ({ theme, separate, noBorder }) => separate ? theme.separator :  noBorder ? 'transparent' : theme.border };
+    border-bottom: 1px solid ${ ({ theme, separate, noBorder }) => separate ? theme.separator :  noBorder ? 'transparent' : theme.border };
     display: flex;
     font-family: ${ ({ bold }) => bold ? 'bold' : '' };
-    font-size: 15px;
+    font-size: 16px;
     line-height: 20px;
     justify-content: ${ ({ center }) => center ? 'center' : 'space-between' };
     padding: 16px 24px;
