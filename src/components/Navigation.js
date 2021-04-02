@@ -1,32 +1,42 @@
 import React, { useRef, useContext, useState, useEffect } from 'react';
 import styled from 'styled-components';
 
-import NavigationLink from './NavigationLink';
-import Text from '../components/common/Text';
 import { AuthContext } from '../Auth';
+import NavigationLink from './NavigationLink';
+import Search from '../components/common/Search';
+import Text from '../components/common/Text';
 
 const Navigation = ({
     categories,
-    userId
+    userId,
+    onSearchChange,
+    resetSearch,
+    searchValue
 }) => {
     const [slide, setSlide] = useState(false);
     const [scrollPosition, setScrollPosition] = useState(0);
-    const [show, setShow] = useState(false);
+
+    const { currentUser } = useContext(AuthContext);
+
+    const user = currentUser && currentUser.uid === userId;
 
     const handleScroll = () => {
-        setScrollPosition(document.body.getBoundingClientRect().top);
-        setSlide(document.body.getBoundingClientRect().top < scrollPosition);
-        setShow(window.pageYOffset > 150)
+        if (user) {
+            setScrollPosition(document.body.getBoundingClientRect().top);
+            setSlide(document.body.getBoundingClientRect().top < scrollPosition);
+        }
+        return;
     }
 
     useEffect(() => {
-        window.addEventListener("scroll", handleScroll);
+        if (user) {
+            window.addEventListener("scroll", handleScroll);
 
-        return () =>  window.removeEventListener("scroll", handleScroll);
+            return () =>  window.removeEventListener("scroll", handleScroll);
+        }
     });
 
     const headerRef = useRef(null);
-    const { currentUser } = useContext(AuthContext);
 
     if (!categories.length && currentUser) {
         return (
@@ -42,10 +52,14 @@ const Navigation = ({
 
     return (
         <Root ref={ headerRef }
-            show={ show }
             slide={ slide }
-            user={ currentUser && currentUser.uid === userId }
+            user={ user }
         >
+            <Search value={ searchValue }
+                reset={ resetSearch }
+                onChange={ onSearchChange }
+            />
+
             { categories && categories.map((category) => (
                 <NavigationLink category={ category }
                     key={ category.id }
@@ -67,16 +81,14 @@ const Root = styled.div`
     border-bottom: 1px solid ${ ({ theme }) => theme.border };
     display: flex;
     height: 64px;
-    opacity: ${ ({ show }) => show ? 1 : 0 };
     overflow-x: auto;
-    position: fixed;
+    position: sticky;
     top: 0;
-    transform: ${ ({ user, slide }) => !slide && (user ? 'translate(0, 128px)' : 'translate(0, 64px)') };
     transition: all 400ms ease;
-    visibility: ${ ({ show }) => show ? 'visible' : 'hidden' };
     white-space: nowrap;
     width: 100%;
     z-index: 2;
+    transform: ${ ({ slide, user }) => !slide && (user && 'translate(0, 64px)') };
 
     ::-webkit-scrollbar {
         display: none;

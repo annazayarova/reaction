@@ -73,7 +73,7 @@ const StyledCloseIcon  = styled(CloseIcon)`
 `;
 
 const Root  = styled.div`
-
+    border-right: 1px solid ${ ({ theme }) => theme.border };
 `;
 
 const InputWrapper  = styled.div`

@@ -8,7 +8,6 @@ import Header from '../components/Header';
 import HeaderOfUser from '../components/HeaderOfUser';
 import Navigation from '../components/Navigation';
 import NotFound from '../components/common/NotFound';
-import Intro from '../components/Intro';
 import Skeleton from '../components/common/Loadings/Skeleton';
 import { AuthContext } from '../Auth';
 
@@ -100,10 +99,8 @@ const Tenant = ({
 					theme={ theme }
 					onToggleTheme={ onToggleTheme }
 					themeToggled={ themeToggled }
-					onSearchChange={ handleSearchChange }
-					searchValue={ searchTerm }
-					resetSearch={ handleSearchReset }
 					userId={ idFromUrl }
+					searchValue={ searchTerm }
 				/>
 
 				{ loading ? <Skeleton /> :
@@ -111,6 +108,9 @@ const Tenant = ({
 						<Navigation categories={ categories }
 							invisible={ searchTerm }
 							userId={ idFromUrl }
+							onSearchChange={ handleSearchChange }
+							searchValue={ searchTerm }
+							resetSearch={ handleSearchReset }
 						/>
 
 						{ searchTerm.length > 0 && !searchItems.length > 0 && (
@@ -137,8 +137,8 @@ export default Tenant;
 
 const Root = styled.div`
 	position: relative;
-	min-height: ${ ({ user }) =>  user ? 'calc(100vh - 128px)' : 'calc(100vh - 64px)' };
-	top: ${ ({ user }) =>  user ? '128px' : '64px' };
+	min-height: ${ ({ user }) =>  user ? 'calc(100vh - 64px)' : 0 };
+	top: ${ ({ user }) =>  user ? '64px' : 0 };
 `;
 
 const Wrap = styled.div`

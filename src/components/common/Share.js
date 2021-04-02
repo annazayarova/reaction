@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { ReactComponent as ShareIcon } from '../../img/share.svg';
+import { ReactComponent as ShareIcon } from '../../img/share-outline.svg';
 
 const Share = () => {
     return (
@@ -14,8 +14,8 @@ const Share = () => {
 export default Share;
 
 const StyledShareIcon  = styled(ShareIcon)`
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
     cursor: pointer;
 
     path {

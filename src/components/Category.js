@@ -164,7 +164,7 @@ const Category = ({
                     title={ category.hidden === true ? 'Show category?' : 'Hide category?'}
                 >
                     <Block center>
-                        <Text small>The category with all its items will be { category.hidden === true ? 'visible' : 'invisible'} to customers</Text>
+                        <Text small>The category with all its items will be { category.hidden === true ? 'visible' : 'invisible'} to the clients</Text>
                     </Block>
 
                     <Block center bold

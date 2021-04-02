@@ -16,21 +16,28 @@ const HeaderOfUser = ({
     darkMode
 }) => {
     const [ loading, setLoading ] = useState(false);
-    const [show, setShow] = useState(true);
+    const [slide, setSlide] = useState(true);
     const [scrollPosition, setScrollPosition] = useState(0)
 
+    const { currentUser } = useContext(AuthContext);
+
+    const user = currentUser?.uid === userId;
+
     const handleScroll = () => {
-        setScrollPosition(document.body.getBoundingClientRect().top)
-        setShow(document.body.getBoundingClientRect().top > scrollPosition)
+        if (user) {
+            setScrollPosition(document.body.getBoundingClientRect().top)
+            setSlide(document.body.getBoundingClientRect().top > scrollPosition)
+        }
+        return;
     }
 
     useEffect(() => {
-        window.addEventListener("scroll", handleScroll);
+        if (user) {
+            window.addEventListener("scroll", handleScroll);
 
-        return () =>  window.removeEventListener("scroll", handleScroll);
+            return () =>  window.removeEventListener("scroll", handleScroll);
+        }
     });
-
-    const { currentUser } = useContext(AuthContext);
 
     const handleGoToSubscription = async () => {
         setLoading(true);
@@ -45,12 +52,12 @@ const HeaderOfUser = ({
         window.location.assign(data.url);
     }
 
-    if (currentUser?.uid !== userId) {
+    if (!user) {
         return null;
     }
 
     return (
-        <Root show={ show }>
+        <Root slide={ slide }>
             <ProfileButton businessName={ businessName }
                 darkMode={ darkMode }
             />
@@ -79,7 +86,7 @@ const Root  = styled.div`
     width: 100%;
     z-index: 1;
     transition: all 400ms ease;
-    transform: ${ ({ show }) => !show && 'translate(0, -100%)' };
+    transform: ${ ({ slide }) => !slide && 'translate(0, -100%)' };
 `;
 
 const StyledAddButton = styled(AddButton)`
