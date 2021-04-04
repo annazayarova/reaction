@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import styled from 'styled-components';
 import ReactDOM from "react-dom";
 
-import Title from '../common/Title';
+import Text from '../common/Text';
 import useLockBodyScroll from '../../hooks/useLockBodyScroll';
 import Block from '../common/Block';
 
@@ -30,9 +30,9 @@ const JSX_MODAL = ({
         <Window onClick={ handleClick }>
             <Root ref={ ref }>
                     <Header>
-                        <StyledTitle medium>
+                        <Text medium small>
                             { title }
-                        </StyledTitle>
+                        </Text>
                     </Header>
 
                     { children }
@@ -89,8 +89,4 @@ const Root  = styled.div`
     position: relative;
     transition: ${ ({ theme }) => theme.transition };
     width: 80%;
-`;
-
-const StyledTitle  = styled(Title)`
-    text-align: center;
 `;

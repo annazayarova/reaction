@@ -11,7 +11,11 @@ import { color } from '../styles/theme';
 
 const HeaderOfUser = ({
     categories,
-    userId
+    userId,
+    onBusinessNameChange,
+    businessName,
+    businessNameError, 
+    updateBusinessName
 }) => {
     const [ loading, setLoading ] = useState(false);
 
@@ -38,7 +42,11 @@ const HeaderOfUser = ({
 
     return (
         <Root>
-            <ProfileButton />
+            <ProfileButton  onBusinessNameChange={ onBusinessNameChange }
+            businessName={ businessName }
+            businessNameError={ businessNameError }
+            updateBusinessName={ updateBusinessName }
+        />
 
             { loading ? <LoadingSpinner color={ color.primary } />
                 : <Link text="Go to subscriptions"

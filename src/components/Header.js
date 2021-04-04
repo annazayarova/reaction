@@ -1,22 +1,21 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 import Share from './common/Share';
 import Settings from './Settings';
 import Title from './common/Title';
-import { AuthContext } from '../Auth';
 
 const Header = ({
     onToggleTheme,
     theme,
     themeToggled,
     searchValue,
-    userId
+    userId,
+    businessName
 }) => {
-    const { currentUser } = useContext(AuthContext);
-
     return (
-        <Root searchValue={ searchValue }>
+        <Root searchValue={ searchValue }
+    >
             <Settings theme={ theme }
                 onToggleTheme={ onToggleTheme }
                 themeToggled={ themeToggled }
@@ -24,7 +23,7 @@ const Header = ({
             />
 
             <Title medium>
-                { currentUser?.displayName }
+                { businessName }
             </Title>
 
             <Share />

@@ -37,7 +37,7 @@ const Home = () => {
 
                 <Login to='/signin'
                 >
-                    Sign in
+                    Login
                 </Login>
             </Header>
 
@@ -51,7 +51,7 @@ const Home = () => {
                 </StyledText>
 
                 <Create to='/signup'>
-                    Start now
+                    Get started
                 </Create>
 
             </CenteredContent>

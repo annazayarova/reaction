@@ -20,8 +20,8 @@ const Tenant = ({
 	const [ categories, setCategories ] = useState([]);
 	const [ items, setItems ] = useState([]);
 	const [ searchTerm, setSearchTerm ] = useState('');
-	const [ notFound, setNotFound ] = useState(false);
 	const [ loading, setLoading ] = useState(true);
+	const [ businessName, setBusinessName ] = useState('');
 
 	const { currentUser } = useContext(AuthContext);
 
@@ -39,7 +39,24 @@ const Tenant = ({
 
 	const docRef = db.firestore().collection("users").doc(idFromUrl);
 
+	const updateBusinessName = () => {
+			docRef
+			.set({
+				displayName: businessName
+			}, { merge: true })
+	};
+
 	useEffect(() => {
+		docRef.get().then((doc) => {
+			if (doc.exists) {
+				setBusinessName(doc.data().displayName)
+			} else {
+				console.log("No such document!");
+			}
+		}).catch((error) => {
+			console.log("Error getting document:", error);
+		});
+
 		docRef
 		.collection('categories')
 		.orderBy('timestamp', 'asc')
@@ -81,6 +98,9 @@ const Tenant = ({
 			<Wrap>
 				<HeaderOfUser userId={ idFromUrl }
 					categories={ categories }
+					onBusinessNameChange={ (e) => setBusinessName(e.target.value) }
+					businessName={ businessName }
+					updateBusinessName={ updateBusinessName }
 				/>
 
 				<Header theme={ theme }
@@ -88,6 +108,7 @@ const Tenant = ({
 					themeToggled={ themeToggled }
 					userId={ idFromUrl }
 					searchValue={ searchTerm }
+					businessName={ businessName }
 				/>
 
 				{ loading ? <Skeleton /> :
@@ -124,8 +145,8 @@ export default Tenant;
 
 const Root = styled.div`
 	position: relative;
-	min-height: ${ ({ user }) =>  user ? 'calc(100vh - 64px)' : '100vh' };
-	top: ${ ({ user }) =>  user ? '64px' : 0 };
+	min-height: 100vh;
+	top: ${ ({ user }) => user ? '64px' : 0 };
 `;
 
 const Wrap = styled.div`

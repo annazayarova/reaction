@@ -33,7 +33,7 @@ const CategoriesList = ({
 
             <List open={ open }>
                 <BackLink onClick={ () => setOpen(false) }
-                    text={ t('back')  }
+                    text={ t('back') }
                 />
 
                 { categories.map(category =>

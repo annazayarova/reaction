@@ -45,7 +45,7 @@ if (currentUser) {
         <>
         <Root>
             <StyledTitle>
-                Subscriber's Sign in
+                Subscriber's Login
             </StyledTitle>
 
             <Form onSubmit={ handleLogin }>

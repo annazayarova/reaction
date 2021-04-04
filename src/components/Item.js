@@ -44,7 +44,7 @@ const Item = ({
             name: itemName.trim(),
             price: price.trim(),
             description: description.trim(),
-            vegan: !item.vegan
+            vegan
         }, { merge: true })
 
         setOpenEdit(false);

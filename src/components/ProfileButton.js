@@ -11,15 +11,17 @@ import Input from './common/Input';
 import ImageUpload from './common/ImageUpload';
 
 const ProfileButton = ({
-    className
+    className,
+    onBusinessNameChange,
+    businessName,
+    businessNameError,
+    updateBusinessName
 }) => {
     const { currentUser } = useContext(AuthContext);
 
     const [ open, setOpen ] = useState(false);
     const [ openEdit, setOpenEdit ] = useState(false);
-    const [ name, setName ] = useState(currentUser.displayName || '');
     const [ openLogo, setOpenLogo ] = useState(false);
-    const [ error, setError ] =  useState('');
 
     const handleClick = () => {
         setOpen(true);
@@ -30,14 +32,9 @@ const ProfileButton = ({
         db.auth().signOut();
     };
 
-    const updateBusinessName = () => {
-        currentUser.updateProfile({
-            displayName: name
-        }).then(function() {
-            setOpenEdit(false);
-        }).catch(function(error) {
-            setError(error.message);
-        });
+    const onUpdateBusinessName = () => {
+        setOpenEdit(false);
+        updateBusinessName();
     };
 
     const saveLogo = () => {
@@ -73,7 +70,7 @@ const ProfileButton = ({
                     </Block>
 
                     <Block center
-                        onClick={ () => (setOpenEdit(true), setOpen(false)) }
+                        onClick={ () => (setOpenLogo(true), setOpen(false)) }
                     >
                         Add logo
                     </Block>
@@ -101,25 +98,25 @@ const ProfileButton = ({
             { openEdit &&
                 <Modal onClose={ () => setOpenEdit(false) }
                     title="Edit name"
-                    error={ error }
+                    error={ businessNameError }
                 >
                     <Block center>
-                        <Input value={ name }
-                            onChange={ (e) => setName(e.target.value) }
+                        <Input value={ businessName }
+                            onChange={ onBusinessNameChange }
                             placeholder="Business name"
                             autoFocus
                             center
                         />
                     </Block>
 
-                    { error &&
+                    { businessNameError &&
                         <Block red small center>
-                            { error }
+                            { businessNameError }
                         </Block>
                     }
                     <Block bold center
-                    onClick={ updateBusinessName }
-                    disabled={ !name || currentUser.displayName === name.trim() }
+                    onClick={ onUpdateBusinessName }
+                    disabled={ !businessName }
                 >
                     Update
                 </Block>
@@ -129,10 +126,13 @@ const ProfileButton = ({
                 <Modal onClose={ () => setOpenLogo(false) }
                     title="Add logo"
                 >
-                    <Block center bold
-                        onClick={ saveLogo }
-                    >
-                        Logo
+                    <Block center small>
+                        Replace business name by logo,
+                        use svg, png or jpg
+                    </Block>
+
+                    <Block>
+                        <ImageUpload userId={ currentUser.uid } />
                     </Block>
                 </Modal>
             }

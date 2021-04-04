@@ -33,23 +33,19 @@ const SignUp = () => {
             .createUserWithEmailAndPassword(email.value, password.value);
 
             if (user) {
-                const currentUser = db.auth().currentUser;
-                const userDocRef = db.firestore().collection('users').doc(currentUser.uid);
+                const uid = db.auth().currentUser.uid;
+                const userDocRef = db.firestore().collection('users').doc(uid);
 
-                currentUser.updateProfile({
-                    displayName,
-                    photoURL: ""
-                }).then(function() {
-                    console.log('successful user update')
-                }).catch(function(error) {
-                    console.log('error user update')
-                });
+                userDocRef
+                .set({
+                    displayName: displayName
+                })
 
                 const checkoutRef = await userDocRef
                         .collection('checkout_sessions')
                         .add({
                             price: price,
-                            success_url: `${ window.location.origin }/${ currentUser.uid }`,
+                            success_url: `${ window.location.origin }/${ uid }`,
                             cancel_url: `${ window.location.origin }/signup`,
                         });
                         // Wait for the CheckoutSession to get attached by the extension
@@ -124,7 +120,7 @@ const SignUp = () => {
                 />
             </form>
 
-            <StyledText grey>Already subscribed? <StyledLink to="/signin">Sign in</StyledLink> to continue</StyledText>
+            <StyledText grey>Already subscribed? <StyledLink to="/signin">Login</StyledLink> to continue</StyledText>
 
             <StyledText small grey>100% secure payment via Stripe</StyledText>
         </Root>
