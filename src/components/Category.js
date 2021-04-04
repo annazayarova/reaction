@@ -163,8 +163,8 @@ const Category = ({
                 <Modal onClose={ () => setOpenHide(false) }
                     title={ category.hidden === true ? 'Show category?' : 'Hide category?'}
                 >
-                    <Block center>
-                        <Text small>The category with all its items will be { category.hidden === true ? 'visible' : 'invisible'} to the clients</Text>
+                    <Block center small>
+                        The category with all its items will be { category.hidden === true ? 'visible' : 'invisible'} to the clients
                     </Block>
 
                     <Block center bold

@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }) => {
 			setCurrentUser(user);
 //			setPending(false)
 		});
-	}, []);
+	}, [ ]);
 
 /*	if (pending) {
 		return <Text>Loading...</Text>

@@ -33,19 +33,23 @@ const SignUp = () => {
             .createUserWithEmailAndPassword(email.value, password.value);
 
             if (user) {
-                const uid = db.auth().currentUser.uid;
-                const userDocRef = db.firestore().collection('users').doc(uid);
+                const currentUser = db.auth().currentUser;
+                const userDocRef = db.firestore().collection('users').doc(currentUser.uid);
 
-                userDocRef
-                .set({
-                    displayName: displayName
-                })
+                currentUser.updateProfile({
+                    displayName,
+                    photoURL: ""
+                }).then(function() {
+                    console.log('successful user update')
+                }).catch(function(error) {
+                    console.log('error user update')
+                });
 
                 const checkoutRef = await userDocRef
                         .collection('checkout_sessions')
                         .add({
                             price: price,
-                            success_url: `${ window.location.origin }/${ uid }`,
+                            success_url: `${ window.location.origin }/${ currentUser.uid }`,
                             cancel_url: `${ window.location.origin }/signup`,
                         });
                         // Wait for the CheckoutSession to get attached by the extension

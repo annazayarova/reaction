@@ -13,28 +13,9 @@ const Navigation = ({
     resetSearch,
     searchValue
 }) => {
-    const [slide, setSlide] = useState(false);
-    const [scrollPosition, setScrollPosition] = useState(0);
-
     const { currentUser } = useContext(AuthContext);
 
     const user = currentUser && currentUser.uid === userId;
-
-    const handleScroll = () => {
-        if (user) {
-            setScrollPosition(document.body.getBoundingClientRect().top);
-            setSlide(document.body.getBoundingClientRect().top < scrollPosition);
-        }
-        return;
-    }
-
-    useEffect(() => {
-        if (user) {
-            window.addEventListener("scroll", handleScroll);
-
-            return () =>  window.removeEventListener("scroll", handleScroll);
-        }
-    });
 
     const headerRef = useRef(null);
 
@@ -52,7 +33,6 @@ const Navigation = ({
 
     return (
         <Root ref={ headerRef }
-            slide={ slide }
             user={ user }
         >
             <Search value={ searchValue }
@@ -82,13 +62,12 @@ const Root = styled.div`
     display: flex;
     height: 64px;
     overflow-x: auto;
+    overflow-y: hidden;
     position: sticky;
-    top: 0;
-    transition: all 400ms ease;
+    top: ${ ({ user }) => user ? '64px' : 0 };
     white-space: nowrap;
     width: 100%;
     z-index: 2;
-    transform: ${ ({ slide, user }) => !slide && (user && 'translate(0, 64px)') };
 
     ::-webkit-scrollbar {
         display: none;

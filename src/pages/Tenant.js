@@ -17,7 +17,6 @@ const Tenant = ({
 	onToggleTheme
 }) => {
 
-	const [ businessName, setBusinessName ] = useState('');
 	const [ categories, setCategories ] = useState([]);
 	const [ items, setItems ] = useState([]);
 	const [ searchTerm, setSearchTerm ] = useState('');
@@ -68,16 +67,6 @@ const Tenant = ({
 					vegan: doc.data().vegan
 				}) ))
 		})
-
-		docRef.get().then((doc) => {
-			if (doc.exists) {
-				setBusinessName(doc.data().displayName);
-			} else {
-				setNotFound(true);
-			}
-		}).catch((error) => {
-			console.log("Error getting document:", error);
-		});
 	}, []);
 
 	const searchItems = !searchTerm
@@ -92,11 +81,9 @@ const Tenant = ({
 			<Wrap>
 				<HeaderOfUser userId={ idFromUrl }
 					categories={ categories }
-					businessName={ businessName }
 				/>
 
-				<Header businessName={ businessName }
-					theme={ theme }
+				<Header theme={ theme }
 					onToggleTheme={ onToggleTheme }
 					themeToggled={ themeToggled }
 					userId={ idFromUrl }
@@ -137,7 +124,7 @@ export default Tenant;
 
 const Root = styled.div`
 	position: relative;
-	min-height: ${ ({ user }) =>  user ? 'calc(100vh - 64px)' : 0 };
+	min-height: ${ ({ user }) =>  user ? 'calc(100vh - 64px)' : '100vh' };
 	top: ${ ({ user }) =>  user ? '64px' : 0 };
 `;
 

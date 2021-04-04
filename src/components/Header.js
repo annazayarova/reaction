@@ -1,18 +1,19 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 
 import Share from './common/Share';
 import Settings from './Settings';
 import Title from './common/Title';
+import { AuthContext } from '../Auth';
 
 const Header = ({
-    businessName,
     onToggleTheme,
     theme,
     themeToggled,
     searchValue,
     userId
 }) => {
+    const { currentUser } = useContext(AuthContext);
 
     return (
         <Root searchValue={ searchValue }>
@@ -23,7 +24,7 @@ const Header = ({
             />
 
             <Title medium>
-                { businessName }
+                { currentUser?.displayName }
             </Title>
 
             <Share />

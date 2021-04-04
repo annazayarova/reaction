@@ -26,8 +26,7 @@ const Languages = ({ className }) => {
 
     const languages = [ {
         name: 'english',
-        action: () => changeLanguage('english'),
-        noBorder: true
+        action: () => changeLanguage('english')
     }, {
         name: 'greek',
         action: () => changeLanguage('greek')
@@ -50,7 +49,6 @@ const Languages = ({ className }) => {
                 { languages.map(language =>
                     <StyledBlock onClick={ language.action }
                         key={ language.name }
-                        noBorder={ language.noBorder }
                     >
                         <StyledText activeLanguage={ activeLanguage === language.name }>
                             { language.name }
@@ -72,7 +70,7 @@ const StyledActiveIcon = styled(ActiveIcon)`
 
     path {
         &:last-of-type {
-            fill: ${ ({ theme }) => theme.primary }
+            fill: ${ ({ theme }) => theme.text }
         }
     }
 `;

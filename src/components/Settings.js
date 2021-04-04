@@ -30,7 +30,7 @@ const Settings = ({
             >
                 <Languages />
 
-                <Block noBorder>
+                <Block>
                     <Text>
                         { t('activate') }
 

@@ -11,15 +11,15 @@ import Input from './common/Input';
 import ImageUpload from './common/ImageUpload';
 
 const ProfileButton = ({
-    className,
-    businessName
+    className
 }) => {
+    const { currentUser } = useContext(AuthContext);
+
     const [ open, setOpen ] = useState(false);
     const [ openEdit, setOpenEdit ] = useState(false);
-    const [ name, setName ] = useState(businessName);
+    const [ name, setName ] = useState(currentUser.displayName || '');
     const [ openLogo, setOpenLogo ] = useState(false);
-
-    const { currentUser } = useContext(AuthContext);
+    const [ error, setError ] =  useState('');
 
     const handleClick = () => {
         setOpen(true);
@@ -31,14 +31,13 @@ const ProfileButton = ({
     };
 
     const updateBusinessName = () => {
-        currentUser && db.firestore()
-        .collection('users')
-        .doc(currentUser.uid)
-        .set({
-            displayName: name.trim()
-        }, { merge: true })
-
-        setOpenEdit(false);
+        currentUser.updateProfile({
+            displayName: name
+        }).then(function() {
+            setOpenEdit(false);
+        }).catch(function(error) {
+            setError(error.message);
+        });
     };
 
     const saveLogo = () => {
@@ -101,17 +100,26 @@ const ProfileButton = ({
 
             { openEdit &&
                 <Modal onClose={ () => setOpenEdit(false) }
-                    disabled={ !businessName }
                     title="Edit name"
-                    onSave={ updateBusinessName }
+                    error={ error }
                 >
-                    <Block>
-
+                    <Block center>
+                        <Input value={ name }
+                            onChange={ (e) => setName(e.target.value) }
+                            placeholder="Business name"
+                            autoFocus
+                            center
+                        />
                     </Block>
 
+                    { error &&
+                        <Block red small center>
+                            { error }
+                        </Block>
+                    }
                     <Block bold center
                     onClick={ updateBusinessName }
-                    disabled={ !name || businessName === name.trim() }
+                    disabled={ !name || currentUser.displayName === name.trim() }
                 >
                     Update
                 </Block>

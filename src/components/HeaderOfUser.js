@@ -11,33 +11,13 @@ import { color } from '../styles/theme';
 
 const HeaderOfUser = ({
     categories,
-    businessName,
-    userId,
-    darkMode
+    userId
 }) => {
     const [ loading, setLoading ] = useState(false);
-    const [slide, setSlide] = useState(true);
-    const [scrollPosition, setScrollPosition] = useState(0)
 
     const { currentUser } = useContext(AuthContext);
 
     const user = currentUser?.uid === userId;
-
-    const handleScroll = () => {
-        if (user) {
-            setScrollPosition(document.body.getBoundingClientRect().top)
-            setSlide(document.body.getBoundingClientRect().top > scrollPosition)
-        }
-        return;
-    }
-
-    useEffect(() => {
-        if (user) {
-            window.addEventListener("scroll", handleScroll);
-
-            return () =>  window.removeEventListener("scroll", handleScroll);
-        }
-    });
 
     const handleGoToSubscription = async () => {
         setLoading(true);
@@ -57,10 +37,8 @@ const HeaderOfUser = ({
     }
 
     return (
-        <Root slide={ slide }>
-            <ProfileButton businessName={ businessName }
-                darkMode={ darkMode }
-            />
+        <Root>
+            <ProfileButton />
 
             { loading ? <LoadingSpinner color={ color.primary } />
                 : <Link text="Go to subscriptions"
@@ -86,7 +64,6 @@ const Root  = styled.div`
     width: 100%;
     z-index: 1;
     transition: all 400ms ease;
-    transform: ${ ({ slide }) => !slide && 'translate(0, -100%)' };
 `;
 
 const StyledAddButton = styled(AddButton)`

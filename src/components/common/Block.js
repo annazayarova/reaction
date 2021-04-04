@@ -10,7 +10,8 @@ const Block = ({
     noBorder,
     onClick,
     red,
-    separate = false
+    separate = false,
+    small
 }) => {
     return (
         <Root bold={ bold }
@@ -21,6 +22,7 @@ const Block = ({
             onClick={ onClick }
             red={ red }
             separate={ separate }
+            small={ small }
         >
             { children }
         </Root>
@@ -34,7 +36,7 @@ const Root  = styled.div`
     border-bottom: 1px solid ${ ({ theme, separate, noBorder }) => separate ? theme.separator :  noBorder ? 'transparent' : theme.border };
     display: flex;
     font-family: ${ ({ bold }) => bold ? 'bold' : '' };
-    font-size: 16px;
+    font-size: ${ ({ small }) => small ? '14px' : '16px' };
     line-height: 20px;
     justify-content: ${ ({ center }) => center ? 'center' : 'space-between' };
     padding: 16px 24px;
