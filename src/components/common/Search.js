@@ -34,6 +34,7 @@ const Search = ({
                         placeholder="Search items"
                         onChange={ onChange }
                         autoFocus
+                        width='calc(100% - 64px - 64px)'
                     />
 
                     <Close>
@@ -60,12 +61,18 @@ const StyledSearchIcon  = styled(SearchIcon)`
 `;
 
 const Close  = styled.div`
-    width: 24px;
-    height: 24px;
+    width: 64px;
+    height: 64px;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 `;
 
 const StyledCloseIcon  = styled(CloseIcon)`
+    width: 24px;
+    height: 24px;
+
     path {
         &:last-of-type {
             fill: ${ ({ theme }) => theme.text }
@@ -82,7 +89,6 @@ const InputWrapper  = styled.div`
     display: flex;
     height: 100%;
     left: 0;
-    padding: 0 24px 0 8px;
     position: absolute;
     top: 0;
     width: 100%;

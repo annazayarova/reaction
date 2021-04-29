@@ -26,15 +26,17 @@ export default AddToOrderButton;
 
 const Root = styled.div`
     align-items: center;
-    border-left: 1px solid ${ ({ theme }) => theme.body };
+    background: ${ ({ added, theme }) => added ? theme.primary : '' };
+    border-radius: 50%;
+    border : 1px solid ${ ({ added, theme }) => added ? theme.primary : theme.border };
     color: ${ ({ theme }) => theme.text };
     display: flex;
     font-family: regular;
-    font-size: 20px;
     justify-content: center;
     text-transform: uppercase;
-    width: 48px;
-    height: 48px;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
 `;
 
 const StyledDoneIcon = styled(DoneIcon)`
@@ -43,7 +45,7 @@ const StyledDoneIcon = styled(DoneIcon)`
 
     path {
         &:last-of-type {
-            fill: ${ ({ theme }) => theme.text };
+            fill: white;
         }
     }
 `;

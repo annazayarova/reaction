@@ -107,7 +107,6 @@ const Tenant = ({
 					onToggleTheme={ onToggleTheme }
 					themeToggled={ themeToggled }
 					userId={ idFromUrl }
-					searchValue={ searchTerm }
 					businessName={ businessName }
 				/>
 

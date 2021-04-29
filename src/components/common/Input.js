@@ -11,7 +11,8 @@ const Input = React.forwardRef(({
     onChange,
     placeholder,
     type = 'text',
-    notTransparent = false
+    notTransparent = false,
+    width
 }, ref) => (
     <Root autoFocus={ autoFocus }
         className={ className }
@@ -24,6 +25,7 @@ const Input = React.forwardRef(({
         type={ type }
         value={ value }
         ref={ ref }
+        width={ width }
     />
 ))
 
@@ -40,7 +42,7 @@ const Root = styled.input`
     font-family: regular, Arial;
     outline: none;
     padding: ${ ({ notTransparent }) => notTransparent ? '0 16px' : '0'};
-    width: 100%;
+    width: ${ ({ width }) => width ? width : '100%'};
     text-align: ${ ({ center }) => center && 'center'};
 
     ::placeholder {

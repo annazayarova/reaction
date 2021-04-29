@@ -46,7 +46,7 @@ const Home = () => {
                     <span>Interactive,</span><br/>flexible and <br />future-oriented<br />digital menu
                 </StyledTitle>
 
-                <StyledText big grey medium>
+                <StyledText grey>
                     For your restaurant, bar or hotel
                 </StyledText>
 
@@ -66,14 +66,19 @@ const Circles = styled.div`
     overflow: hidden;
     z-index: -1;
     opacity: 0.1;
-    top: 76px;
-    right: -20%;
-    width: 120%;
-    height: 120%;
+    top: 0;
+    right: -30%;
+    width: 110%;
+    height: 110%;
 
     svg {
         width: 120%;
         height: 120%;
+        g {
+            g{
+                stroke: ${ ({ theme }) => theme.primary }
+            }
+        }
     }
 
     @media(max-width: ${ ({ theme }) => theme.tabletBreakpoint }) {
@@ -84,7 +89,7 @@ const Circles = styled.div`
 
 const Create = styled(Link)`
     color: ${ ({ theme }) => theme.text };
-    font-family: bold;
+    font-family: medium;
     font-size: 16px;
     text-decoration: underline;
 `;
@@ -101,6 +106,7 @@ const Login = styled(Create)`
 
 const Root = styled.div`
     overflow-x: hidden;
+    width: 100%;
 `;
 
 const Header = styled.div`

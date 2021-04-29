@@ -16,8 +16,14 @@ const Settings = ({
     themeToggled
 }) => {
     const [open, setOpen] = useState(false);
+    const [languagesOpen, setLanguagesOpen] = useState(false);
 
     const { t, i18n } = useTranslation();
+
+const handleClose = () => {
+    setOpen(false);
+    setLanguagesOpen(false)
+};
 
     return (
         <Root>
@@ -26,20 +32,21 @@ const Settings = ({
             </Menu>
 
             <Slider open={ open }
-                onClose={ () => setOpen(false) }
+                onClose={ handleClose }
             >
-                <Languages />
+                <Languages onToggle={ () => setLanguagesOpen(!languagesOpen) }
+                    open={ languagesOpen }
+                    onClose={ () => (setLanguagesOpen(false), setOpen(false)) }
+                />
 
                 <Block>
-                    <Text>
-                        { t('activate') }
-
+                    <StyledText>
                         <Mode>
-                            { theme === 'light' ? 'dark' : 'light' }
+                            { theme === 'light' ? 'Dark' : 'Light' }
                         </Mode>
 
-                        { t('mode') }
-                    </Text>
+                        mode
+                    </StyledText>
 
                     <Toggle id="theme"
                         onChange={ onToggleTheme }
@@ -50,7 +57,7 @@ const Settings = ({
                 <Block>
                     <Link to="/">
                         <Text>
-                            { t('are_you_a_store_owner') }?
+                            { t('Are you a store owner') }
                         </Text>
                     </Link>
                 </Block>
@@ -62,10 +69,17 @@ const Settings = ({
 export default Settings;
 
 const Mode = styled.span`
-    margin: 0 6px;
+    margin-right: 6px;
 `;
 
 const Root  = styled.div`
+`;
+
+const StyledText  = styled(Text)`
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-right: 8px;
 `;
 
 const Menu  = styled.div`

@@ -12,7 +12,7 @@ const Footer = () => {
             <StyledText small
                 grey
             >
-                © 2020 <span>-</span> { year } powered by
+                © 2020 <span>-</span> { year } by
 
                 <Link href={ window.location.origin }>
                     Reaction menu

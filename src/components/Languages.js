@@ -10,10 +10,14 @@ import { ReactComponent as ActiveIcon } from '../img/checked.svg';
 import { ReactComponent as GreekFlag } from '../img/greece.svg';
 import { ReactComponent as UKFlag } from '../img/united-kingdom.svg';
 
-const Languages = ({ className }) => {
+const Languages = ({
+    className,
+    open,
+    onToggle,
+    onClose
+}) => {
     const initialLanguageActive = window.localStorage.getItem('activeLanguage') || 'english';
 
-    const [ open, setOpen ] = useState(false);
     const [ activeLanguage, setActiveLanguage ] = useState(initialLanguageActive);
 
     const { t, i18n } = useTranslation();
@@ -26,20 +30,21 @@ const Languages = ({ className }) => {
 
     const languages = [ {
         name: 'english',
-        action: () => changeLanguage('english')
+        action: () => { changeLanguage('english'); onClose() }
     }, {
         name: 'greek',
-        action: () => changeLanguage('greek')
+        action: () => { changeLanguage('greek'); onClose() }
     } ];
 
     useEffect(() => {
         window.localStorage.setItem('activeLanguage', activeLanguage)
-    })
+    }, [activeLanguage]);
+
     return (
         <Root className={ className }>
             <LanguageLink>
-                <StyledLink onClick={ () => setOpen(!open) }
-                    text={ open ? t('back') : activeLanguage }
+                <StyledLink onClick={ onToggle }
+                    text={ open ? t('Back') : activeLanguage }
                 />
 
                 { activeLanguage === 'english' ? <StyledUKFlag /> : <StyledGreekFlag /> }

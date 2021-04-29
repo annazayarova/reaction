@@ -9,13 +9,11 @@ const Header = ({
     onToggleTheme,
     theme,
     themeToggled,
-    searchValue,
     userId,
     businessName
 }) => {
     return (
-        <Root searchValue={ searchValue }
-    >
+        <Root>
             <Settings theme={ theme }
                 onToggleTheme={ onToggleTheme }
                 themeToggled={ themeToggled }
@@ -40,7 +38,6 @@ const Root  = styled.div`
     display: flex;
     height: 64px;
     justify-content: space-between;
-    margin-bottom: ${ ({ searchValue }) => searchValue ? '24px' : 0 };
     position: relative;
     width: 100%;
 `;

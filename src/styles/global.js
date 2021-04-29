@@ -42,6 +42,8 @@ export const GlobalStyle = createGlobalStyle`
         padding: 0;
         transition: all 0.15s linear;
         -webkit-tap-highlight-color: rgba(0,0,0,0);
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
     }
 
     html,

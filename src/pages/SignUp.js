@@ -122,7 +122,7 @@ const SignUp = () => {
 
             <StyledText grey>Already subscribed? <StyledLink to="/signin">Login</StyledLink> to continue</StyledText>
 
-            <StyledText small grey>100% secure payment via Stripe</StyledText>
+            <StyledText grey small>100% secure payment via Stripe</StyledText>
         </Root>
         </>
     );

@@ -1,8 +1,9 @@
 import React, { useRef } from 'react';
 import styled from 'styled-components';
 import ReactDOM from "react-dom";
+import { useTranslation } from 'react-i18next';
 
-import Text from '../common/Text';
+import Title from '../common/Title';
 import useLockBodyScroll from '../../hooks/useLockBodyScroll';
 import Block from '../common/Block';
 
@@ -11,6 +12,7 @@ const JSX_MODAL = ({
     onClose,
     title
 }) => {
+    const { t, i18n } = useTranslation();
 
     const ref = useRef();
 
@@ -30,9 +32,9 @@ const JSX_MODAL = ({
         <Window onClick={ handleClick }>
             <Root ref={ ref }>
                     <Header>
-                        <Text medium small>
+                        <StyledTitle medium>
                             { title }
-                        </Text>
+                        </StyledTitle>
                     </Header>
 
                     { children }
@@ -41,7 +43,7 @@ const JSX_MODAL = ({
                         center
                         noBorder
                     >
-                        Cancel
+                        { t('Cancel') }
                     </Block>
             </Root>
         </Window>
@@ -56,7 +58,7 @@ export default Modal;
 
 const Header  = styled.div`
     background-color: ${ ({ theme }) => theme.body };
-    border-radius: 8px 8px 0 0;
+    border-radius:12px 12px 0 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -80,7 +82,7 @@ const Window  = styled.div`
 
 const Root  = styled.div`
     background-color: ${ ({ theme }) => theme.content };
-    border-radius: 8px;
+    border-radius: 12px;
     display: flex;
     flex-direction: column;
     height: auto;
@@ -89,4 +91,8 @@ const Root  = styled.div`
     position: relative;
     transition: ${ ({ theme }) => theme.transition };
     width: 80%;
+`;
+
+const StyledTitle  = styled(Title)`
+    text-align: center;
 `;

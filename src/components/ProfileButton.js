@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import QRCode from 'qrcode.react';
+import { useTranslation } from 'react-i18next';
 
 import { AuthContext } from '../Auth';
 import { ReactComponent as UserIcon } from '../img/account.svg';
@@ -18,6 +19,7 @@ const ProfileButton = ({
     updateBusinessName
 }) => {
     const { currentUser } = useContext(AuthContext);
+    const { t, i18n } = useTranslation();
 
     const [ open, setOpen ] = useState(false);
     const [ openEdit, setOpenEdit ] = useState(false);
@@ -60,25 +62,25 @@ const ProfileButton = ({
 
             { open &&
                 <Modal open={ open }
-                    title="Profile"
+                    title={ t('Profile') }
                     onClose={ () => setOpen(false) }
                 >
                     <Block center
                         onClick={ () => (setOpenEdit(true), setOpen(false)) }
                     >
-                        Edit business name
+                        { t('Business name') }
                     </Block>
 
                     <Block center
                         onClick={ () => (setOpenLogo(true), setOpen(false)) }
                     >
-                        Add logo
+                        { t('Add logo') }
                     </Block>
 
                     <Block center
                         onClick={ downloadQR }
                     >
-                        Download QR code
+                        { t('Download QR code') }
 
                         <StyledQRCode id="QRCode"
                             value={ url }
@@ -90,7 +92,7 @@ const ProfileButton = ({
                         center
                         bold
                     >
-                        Sign out
+                        { t('Logout') }
                     </Block>
                 </Modal>
             }

@@ -1,5 +1,6 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
 
 import { AuthContext } from '../Auth';
 import AddButton from './AddButton';
@@ -14,9 +15,11 @@ const HeaderOfUser = ({
     userId,
     onBusinessNameChange,
     businessName,
-    businessNameError, 
+    businessNameError,
     updateBusinessName
 }) => {
+    const { t, i18n } = useTranslation();
+
     const [ loading, setLoading ] = useState(false);
 
     const { currentUser } = useContext(AuthContext);
@@ -49,7 +52,7 @@ const HeaderOfUser = ({
         />
 
             { loading ? <LoadingSpinner color={ color.primary } />
-                : <Link text="Go to subscriptions"
+                : <Link text={ t('Manage subscriptions') }
                     onClick={ handleGoToSubscription }
                 />
             }

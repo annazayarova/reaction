@@ -15,6 +15,8 @@ import Text from './common/Text';
 import Textarea from './common/Textarea';
 import Toggle from './common/Toggle';
 
+import img from '../img/1.jpeg';
+
 const Item = ({
     item,
     hiddenCategory,
@@ -79,7 +81,10 @@ const Item = ({
         <Root onClick={ () => setExpanded(!expanded) }
             full={ full }
         >
+            <img src={ img } />
+
             <Content>
+                <Info>
                     <Name bold
                         disabled={ !!item.hidden || hiddenCategory }
                         expanded={ expanded }
@@ -96,23 +101,26 @@ const Item = ({
                             { item.description }
                         </Description>
                     }
-            </Content>
 
-            <Bottom>
-                <Left>
                     <Price disabled={ !!item.hidden || hiddenCategory }
                         small
                         grey={ !(item.hidden || hiddenCategory) }
                     >
                         € { Number(item.price).toFixed(2) }
                     </Price>
+                </Info>
+
+                <AddToOrderButton />
+            </Content>
+
+            <Bottom>
+                <Left>
+
 
                     { item.vegan && <Icon><StyledVeganIcon /></Icon> }
                 </Left>
 
                 <Right>
-                    <AddToOrderButton />
-
                     { currentUser && currentUser.uid === userId &&
                         <More>
                             <StyledMoreIcon onClick={ handleMoreClick } />
@@ -234,9 +242,6 @@ const Price = styled(Text)`
 
 const Name = styled(Text)`
     margin-bottom: 4px;
-    white-space: ${ ({ expanded }) => expanded ? 'wrap' : 'nowrap' };
-    overflow: ${ ({ expanded }) => expanded ? 'auto' : 'hidden' };
-    text-overflow: ${ ({ expanded }) => expanded ? 'initial' : 'ellipsis' };
     width: 100%;
 `;
 
@@ -266,12 +271,12 @@ const Bottom = styled.div`
     display: flex;
     height: 48px;
     justify-content: space-between;
+    margin: 0 16px;
 `;
 
 const Left = styled.div`
     align-items: center;
     display: flex;
-    margin-left: 16px;
 `;
 
 const Right = styled.div`
@@ -301,10 +306,15 @@ const StyledMoreIcon = styled(MoreIcon)`
     }
 `;
 
+const Info = styled.div`
+`;
+
 const Content = styled.div`
     padding: 16px;
     position: relative;
-
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
 `;
 
 const ImgContainer = styled.div`
@@ -315,7 +325,7 @@ const ImgContainer = styled.div`
 `;
 
 const StyledVeganIcon = styled(VeganIcon)`
-    fill: ${ ({ theme }) => theme.green };
+    fill: #36E7BB;
 `;
 
 const Icon = styled.div`

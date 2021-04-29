@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
 
 import { ReactComponent as AddIcon } from '../img/add.svg';
 import Block from './common/Block';
@@ -11,6 +12,8 @@ const AddButton = ({
     className,
     categories
 }) => {
+    const { t, i18n } = useTranslation();
+
     const [ open, setOpen ] = useState(false);
     const [ openNewCategory, setOpenNewCategory ] = useState(false);
     const [ openNewItem, setOpenNewItem ] = useState(false);
@@ -35,20 +38,20 @@ const AddButton = ({
 
             { open &&
                 <Modal open={ open }
-                    title="Create"
+                    title={ t('Create') }
                     onClose={ () => setOpen(false) }
                 >
                     <Block center
                         onClick={ handleOpenNewCategory }
                     >
-                        Category
+                        { t('Category') }
                     </Block>
 
                         <Block center
                             onClick={ handleOpenNewItem }
                             disabled={ categories.length === 0 }
                         >
-                            Item
+                            { t('Item') }
                         </Block>
                 </Modal>
             }

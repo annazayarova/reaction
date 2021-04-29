@@ -34,6 +34,7 @@ const Navigation = ({
     return (
         <Root ref={ headerRef }
             user={ user }
+            searchValue={ searchValue }
         >
             <Search value={ searchValue }
                 reset={ resetSearch }
@@ -59,6 +60,7 @@ const StyledText = styled(Text)`
 const Root = styled.div`
     background: ${ ({ theme }) => theme.body };
     border-bottom: 1px solid ${ ({ theme }) => theme.border };
+    margin-bottom: ${ ({ searchValue }) => searchValue ? '24px' : 0 };
     display: flex;
     height: 64px;
     overflow-x: auto;
