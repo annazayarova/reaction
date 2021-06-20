@@ -1,20 +1,23 @@
 import React, { useRef } from 'react';
 import styled from 'styled-components';
 import ReactDOM from "react-dom";
+import { useTranslation } from 'react-i18next';
 
 import Button from '../common/Button';
 import Title from '../common/Title';
 import useLockBodyScroll from '../../hooks/useLockBodyScroll';
 
-const JSX_MODAL = ({
-    children,
-    label = 'Update',
-    onClose,
-    onSave,
-    open,
-    disabled,
-    title
-}) => {
+const JSX_MODAL = (props) => {
+    const { t, i18n } = useTranslation();
+
+    const { children,
+        label = "Update",
+        onClose,
+        onSave,
+        open,
+        disabled,
+        title 
+    } = props;
 
     useLockBodyScroll();
     
@@ -51,7 +54,11 @@ const JSX_MODAL = ({
                     />
                 </Header>
 
-                { children }
+                <Content>
+                    { children }
+
+                    <Block />
+                </Content>
             </Root>
         </Window>
     );
@@ -70,6 +77,13 @@ const Header  = styled.div`
     justify-content: center;
     padding: 16px 0;
     position: relative;
+    border-radius: 12px 12px 0 0;
+`;
+
+const Block  = styled.div`
+    width: 100%; 
+    height: 56px;
+    background-color: ${ ({ theme }) => theme.content };
 `;
 
 const Close  = styled(Button)`
@@ -85,23 +99,28 @@ const Done  = styled(Button)`
 
 const Window  = styled.div`
     background-color: ${ ({ theme }) => theme.overlay };
-    height: 100vh;
+    bottom: 0;
     left: 0;
-    position: fixed;
-    top: 0;
-    width: 100vw;
-    transition: ${ ({ theme }) => theme.transition };
-    z-index: 3;
     padding-top: 24px;
+    position: fixed;
+    right: 0;
+    top: 0;
+    transition: ${ ({ theme }) => theme.transition };
+    width: 100vw;
+    z-index: 3;
 `;
 
 const Root  = styled.div`
     background-color: ${ ({ theme }) => theme.content };
-    border-radius: 8px 8px 0 0;
+    border-radius: 12px 12px 0 0;
     width: 100%;
-    min-height: 100%;
+    height: 100%;
     position: relative;
-    overflow: auto;
+`;
+
+const Content  = styled.div`
+    max-height: 100%;
+    overflow-y: auto;
 `;
 
 const StyledTitle  = styled(Title)`

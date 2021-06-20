@@ -57,7 +57,7 @@ const handleClose = () => {
                 <Block>
                     <Link to="/">
                         <Text>
-                            { t('Are you a store owner') }
+                            { t('Are you a store owner?') }
                         </Text>
                     </Link>
                 </Block>

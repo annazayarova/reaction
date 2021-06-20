@@ -1,9 +1,9 @@
 import React, { useState, useContext } from 'react';
 import firebase from 'firebase';
+import { useTranslation } from 'react-i18next';
 
 import { AuthContext } from '../Auth';
-import Button from './common/Button';
-import db from '../services/firebase';
+import db from '../config/firebase';
 import Input from './common/Input';
 import Block from './common/Block';
 import Modal from './common/Modal';
@@ -12,6 +12,8 @@ const NewCategoryModal = ({
     onClose,
     open
 }) => {
+    const { t, i18n } = useTranslation();
+
     const { currentUser } = useContext(AuthContext);
 
     const [ categoryName, setCategoryName ] = useState('');
@@ -33,23 +35,24 @@ const NewCategoryModal = ({
 
     return (
         <Modal onClose={ onClose }
-            title="New category"
+            title={ t("New category") }
         >
             <form onSubmit={ addCategory }>
                 <Block>
                     <Input value={ categoryName }
                         onChange={ (e) => setCategoryName(e.target.value) }
-                        placeholder="Category name"
+                        placeholder={ t("Category name") }
                         autoFocus
                         center
                     />
                 </Block>
 
-                <Block center bold uppercase
+                <Block center 
+                    bold
                     disabled={ !categoryName }
                     onClick={ addCategory }
                 >
-                    Create
+                    { t("Create") }
                 </Block>
             </form>
         </Modal>

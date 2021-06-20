@@ -10,7 +10,9 @@ const JSX_MODAL = ({
     children,
     onClose,
     open,
-    title
+    right,
+    title,
+    full
 }) => {
 
     const ref = useRef();
@@ -28,11 +30,18 @@ const JSX_MODAL = ({
     return (
         <Window onClick={ handleClick }
             open={ open }
+            right={ right }
         >
             <Root ref={ ref }
                 open={ open }
+                right={ right }
+                full={ full }
             >
                 <Header>
+                    <Title>
+                        { title && title }
+                    </Title>
+
                     <StyledCloseIcon onClick={ onClose } />
                 </Header>
 
@@ -53,7 +62,7 @@ const Header  = styled.div`
     border-bottom: 1px solid ${ ({ theme }) => theme.border };
     display: flex;
     height: 64px;
-    justify-content: flex-end;
+    justify-content: space-between;
     padding: 0 24px;
     width: 100%;
 `;
@@ -76,7 +85,7 @@ const Window  = styled.div`
     background-color: ${ ({ theme }) => theme.overlay };
     display: flex;
     height: 100vh;
-    justify-content: flex-start;
+    justify-content: ${ ({ right }) => right ? 'flex-end' : 'flex-start' };
     left: 0;
     position: fixed;
     top: 0;
@@ -92,10 +101,11 @@ const Root  = styled.div`
     min-height: 100vh;
     width: 360px;
     position: relative;
-    transform: ${ ({ open }) => (open ? 'translateX(0)' : 'translateX(-100%)') };
+    transform: ${ ({ open, right }) => (open ? 'translateX(0)' : right ? 'translateX(100%)' : 'translateX(-100%)') };
     transition: ${ ({ theme }) => theme.transition };
+    right: 0;
 
     @media(max-width: ${ ({ theme }) => theme.tabletBreakpoint }) {
-        width: 80%;
+        width: ${ ({ full }) => full ? '100%' : '80%' };
     }
 `;

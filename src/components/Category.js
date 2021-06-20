@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
 
 import { AuthContext } from '../Auth';
 import Block from './common/Block';
 import Title from './common/Title';
-import db from '../services/firebase';
+import db from '../config/firebase';
 import Modal from './common/Modal';
 import Text from './common/Text';
 import Input from './common/Input';
@@ -19,6 +20,8 @@ const Category = ({
     invisible,
     userId
 }) => {
+    const { t, i18n } = useTranslation();
+
     const [ categoryName, setCategoryName ] = useState(category.name)
     const [ open, setOpen ] = useState(false);
     const [ openEdit, setOpenEdit ] = useState(false);
@@ -110,42 +113,42 @@ const Category = ({
             </>
 
             { open &&
-                <Modal title="Category"
+                <Modal title={ t("Category") }
                     onClose={ () => setOpen(false) }
                 >
                     <Block center
                         onClick={ () => (setOpenAddItem(true), setOpen(false)) }
                     >
-                        Add item
+                        { t("Add item") }
                     </Block>
 
                     <Block center
                         onClick={ () => (setOpenEdit(true), setOpen(false)) }
                     >
-                        Edit
+                        { t("Edit") }
                     </Block>
 
                     <Block center
                         onClick={ () => (setOpenHide(true), setOpen(false)) }
                     >
-                        { category.hidden === true ? 'Show' : 'Hide' }
+                        { category.hidden === true ? t("Show") : t("Hide") }
                     </Block>
 
                     <Block center red
                         onClick={ () => (setOpenDelete(true), setOpen(false)) }
                     >
-                        Delete
+                        { t("Delete") }
                     </Block>
                 </Modal>
             }
 
             { openEdit && <Modal onClose={ () => setOpenEdit(false) }
-                title="Edit category"
+                title={ t("Edit category") }
             >
                 <Block>
                     <Input value={ categoryName }
                         onChange={ (e) => setCategoryName(e.target.value) }
-                        placeholder="Category name"
+                        placeholder={ t("Category name") }
                         autoFocus
                         center
                     />
@@ -161,7 +164,7 @@ const Category = ({
 
             { openHide &&
                 <Modal onClose={ () => setOpenHide(false) }
-                    title={ category.hidden === true ? 'Show category?' : 'Hide category?'}
+                    title={ category.hidden === true ? t('Show category?') : t('Hide category?') }
                 >
                     <Block center small>
                         The category with all its items will be { category.hidden === true ? 'visible' : 'invisible'} to the clients
@@ -170,14 +173,14 @@ const Category = ({
                     <Block center bold
                         onClick={ hideCategory }
                     >
-                        { category.hidden === true ? 'Show' : 'Hide'}
+                        { category.hidden === true ? t("Show") : t("Hide")}
                     </Block>
                 </Modal>
             }
 
             { openDelete &&
                 <Modal onClose={ () => setOpenDelete(false) }
-                    title='Delete category?'
+                    title={ t("Delete category?") }
                 >
                     <Block center>
                         <Text small>The category with all its items will be deleted</Text>
@@ -186,7 +189,7 @@ const Category = ({
                     <Block center bold red
                         onClick={ deleteCategory }
                     >
-                        Delete
+                        { t("Delete") }
                     </Block>
                 </Modal>
             }

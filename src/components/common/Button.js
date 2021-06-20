@@ -11,7 +11,8 @@ const Button = ({
     regular,
     red,
     notTransparent,
-    loading
+    loading,
+    rounded
 }) => {
 
     return (
@@ -22,6 +23,7 @@ const Button = ({
             red={ red }
             notTransparent={ notTransparent }
             loading={ loading }
+            rounded={ rounded }
         >
             { label }
 
@@ -34,6 +36,7 @@ export default Button;
 
 const Root = styled.button`
     background: ${ ({ theme, notTransparent }) => notTransparent ? theme.primary : 'none' };
+    border-radius: ${ ({ rounded }) => rounded ? '4px' : '0' };
     border: none;
     cursor: pointer;
     color: ${ ({ theme, red, notTransparent }) => red ? theme.red : notTransparent ? 'white' : theme.text };

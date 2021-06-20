@@ -1,6 +1,11 @@
 export const color = {
     //primary: '#49c5b6',
-    primary: '#02F2C6',
+    primary: '#48B254',
+    primaryPalette: {
+        primary10: '#48B254',
+        primary1: '#C5FCDE',
+        primary0: '#ECFEF4',
+    },
     red: '#ff1744',
     grey: {
         grey0: '#fafafa',
@@ -35,7 +40,9 @@ export const lightTheme = {
     title: color.grey.grey10,
     overlay: 'rgba(38,50,56,0.7)',
     separator: color.grey.grey2,
-    primary: color.primary,
+    primary: color.primaryPalette.primary10,
+    primary0: color.primaryPalette.primary0,
+    primary1: color.primary.primary1,
     red: color.red,
     transition: 'all 300ms cubic-bezier(0.465, 0.183, 0.153, 0.946)',
     tabletBreakpoint: '767px'
@@ -57,6 +64,8 @@ export const darkTheme = {
     separator: color.grey.grey7,
     placeholder: color.grey.grey5,
     primary: color.primary,
+    primary0: color.primary.primary0,
+    primary1: color.primary.primary1,
     red: color.red,
     transition: 'all 300ms cubic-bezier(0.465, 0.183, 0.153, 0.946)',
     tabletBreakpoint: '767px'

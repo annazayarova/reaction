@@ -4,8 +4,7 @@ import styled from 'styled-components';
 const Textarea = ({
     value,
     onChange,
-    placeholder = "Write description here"
-
+    placeholder
 }) => (
         <Root value={ value }
             onChange={ onChange }

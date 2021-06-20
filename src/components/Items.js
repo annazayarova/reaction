@@ -1,11 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 
+//import { increment, decrement } from '../pages/Tenant';
+
 import Item from './Item';
 
 const Items = ({
-    items,
     hiddenCategory,
+    items,
     userId
 }) => {
     return (
@@ -20,6 +22,7 @@ const Items = ({
         </Root>
     );
 }
+
 
 export default Items;
 

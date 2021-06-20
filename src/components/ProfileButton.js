@@ -7,7 +7,7 @@ import { AuthContext } from '../Auth';
 import { ReactComponent as UserIcon } from '../img/account.svg';
 import Block from './common/Block';
 import Modal from './common/Modal';
-import db from '../services/firebase';
+import db from '../config/firebase';
 import Input from './common/Input';
 import ImageUpload from './common/ImageUpload';
 
@@ -32,6 +32,7 @@ const ProfileButton = ({
     const handleLogout = () => {
         setOpen(false);
         db.auth().signOut();
+        localStorage.removeItem('activeCategory');
     };
 
     const onUpdateBusinessName = () => {

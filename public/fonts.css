@@ -1,7 +1,7 @@
 
 @font-face {
     font-family: extrabold;
-    src: url('./fonts/apercu-black-trial.otf') format('opentype');
+    src: url('./fonts/ApercuGRETrial-Black.otf') format('opentype');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
@@ -9,7 +9,7 @@
 
 @font-face {
     font-family: bold;
-    src: url('./fonts/apercu-bold-trial.otf') format('opentype');
+    src: url('./fonts/ApercuGRETrial-Bold.otf') format('opentype');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
@@ -17,14 +17,14 @@
 
 @font-face {
     font-family: regular;
-    src: url('./fonts/apercu-regular-trial.otf') format('opentype');
+    src: url('./fonts/ApercuGRETrial-Regular.otf') format('opentype');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
 }
 @font-face {
     font-family: medium;
-    src: url('./fonts/apercu-medium-trial.otf') format('opentype');
+    src: url('./fonts/ApercuGRETrial-Medium.otf') format('opentype');
     font-weight: normal;
     font-style: normal;
     font-display: swap;

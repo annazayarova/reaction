@@ -1,16 +1,18 @@
 import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import { useLocation } from "react-router-dom";
+
 import Categories from '../components/Categories';
-import db from '../services/firebase';
+import db from '../config/firebase';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import HeaderOfUser from '../components/HeaderOfUser';
 import Navigation from '../components/Navigation';
 import NotFound from '../components/common/NotFound';
+import Order from '../components/Order';
 import Skeleton from '../components/common/Loadings/Skeleton';
 import { AuthContext } from '../Auth';
-
+	  
 const Tenant = ({
     theme,
     themeToggled,
@@ -22,6 +24,7 @@ const Tenant = ({
 	const [ searchTerm, setSearchTerm ] = useState('');
 	const [ loading, setLoading ] = useState(true);
 	const [ businessName, setBusinessName ] = useState('');
+  	const [itemImages, setItemImages] = useState([]);
 
 	const { currentUser } = useContext(AuthContext);
 
@@ -67,7 +70,7 @@ const Tenant = ({
 				id: doc.id,
 				name: doc.data().name
 			}) ))
-		})
+			})
 
 		docRef
 		.collection('items')
@@ -81,7 +84,8 @@ const Tenant = ({
 					id: doc.id,
 					name: doc.data().name,
 					price:  doc.data().price,
-					vegan: doc.data().vegan
+					vegan: doc.data().vegan,
+					imageUrl: doc.data().imageUrl,
 				}) ))
 		})
 	}, []);
@@ -126,6 +130,8 @@ const Tenant = ({
 							/>
 						) }
 
+						{ itemImages.map(itemImage => <img src={ itemImage } alt="" />) }
+
 						<Categories categories={ categories }
 							items={ searchItems }
 							invisible={ searchTerm }
@@ -145,7 +151,7 @@ export default Tenant;
 const Root = styled.div`
 	position: relative;
 	min-height: 100vh;
-	top: ${ ({ user }) => user ? '64px' : 0 };
+	top: ${ ({ user }) => user ? '192px' : '128px' };
 `;
 
 const Wrap = styled.div`

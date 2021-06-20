@@ -1,5 +1,5 @@
 import { withRouter } from 'react-router';
-import db from '../services/firebase';
+import db from '../config/firebase';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { loadStripe } from '@stripe/stripe-js';

@@ -53,7 +53,7 @@ const Navigation = ({
 export default Navigation;
 
 const StyledText = styled(Text)`
-    margin: 24px;
+    margin: 0 24px;
     text-align: center;
 `;
 
@@ -65,8 +65,8 @@ const Root = styled.div`
     height: 64px;
     overflow-x: auto;
     overflow-y: hidden;
-    position: sticky;
-    top: ${ ({ user }) => user ? '64px' : 0 };
+    position: fixed;
+    top: ${ ({ user }) => user ? '128px' : '64px' };
     white-space: nowrap;
     width: 100%;
     z-index: 2;

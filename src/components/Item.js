@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
 
 import { ReactComponent as MoreIcon} from '../img/more.svg';
 import { ReactComponent as VeganIcon } from '../img/vegan.svg';
@@ -7,12 +8,13 @@ import { ReactComponent as VeganIcon } from '../img/vegan.svg';
 import { AuthContext } from '../Auth';
 import AddToOrderButton from './AddToOrderButton';
 import Block from './common/Block';
-import db from '../services/firebase';
+import db from '../config/firebase';
 import KeyValue from './common/KeyValue';
 import Modal from './common/Modal';
 import ModalFull from './common/ModalFull';
 import Text from './common/Text';
 import Textarea from './common/Textarea';
+import Title from './common/Title';
 import Toggle from './common/Toggle';
 
 import img from '../img/1.jpeg';
@@ -21,8 +23,12 @@ const Item = ({
     item,
     hiddenCategory,
     userId,
-    full = false
+    full = false,
+    onIncrement,
+    onDecrement
 }) => {
+    const { t, i18n } = useTranslation();
+
     const [ itemName, setItemName ] = useState(item.name || '')
     const [ price, setPrice ] = useState(item.price || '')
     const [ description, setDescription ] = useState(item.description || '')
@@ -81,74 +87,71 @@ const Item = ({
         <Root onClick={ () => setExpanded(!expanded) }
             full={ full }
         >
-            <img src={ img } />
+            <ImgContainer>
+                { item.imageUrl && <img src={ item.imageUrl } /> }
+            </ImgContainer>
 
             <Content>
-                <Info>
-                    <Name bold
-                        disabled={ !!item.hidden || hiddenCategory }
-                        expanded={ expanded }
-                    >
-                        { item.name }
-                    </Name>
+                <Name bold
+                    disabled={ !!item.hidden || hiddenCategory }
+                    expanded={ expanded }
+                >
+                    { item.name }
+                </Name>
 
-                    { item.description &&
-                        <Description grey
-                            small
-                            expanded={ expanded }
-                            disabled={ !!item.hidden || hiddenCategory }
-                        >
-                            { item.description }
-                        </Description>
-                    }
-
-                    <Price disabled={ !!item.hidden || hiddenCategory }
+                { item.description &&
+                    <Description
                         small
-                        grey={ !(item.hidden || hiddenCategory) }
+                        expanded={ expanded }
+                        disabled={ !!item.hidden || hiddenCategory }
                     >
-                        € { Number(item.price).toFixed(2) }
-                    </Price>
-                </Info>
-
-                <AddToOrderButton />
+                        { item.description }
+                    </Description>
+                }
             </Content>
 
             <Bottom>
-                <Left>
+                    <Left>
+                        <Price small
+                            disabled={ !!item.hidden || hiddenCategory }
+                        >€ { Number(item.price).toFixed(2) }</Price>
 
+                        { item.vegan && <Icon disabled={ !!item.hidden || hiddenCategory }><StyledVeganIcon /></Icon> }
+                    </Left>
 
-                    { item.vegan && <Icon><StyledVeganIcon /></Icon> }
-                </Left>
+                    <Right>
+                        <AddToOrderButton onIncrement={ onIncrement }
+                            onDecrement={ onDecrement }
+                        />
 
-                <Right>
-                    { currentUser && currentUser.uid === userId &&
-                        <More>
-                            <StyledMoreIcon onClick={ handleMoreClick } />
-                        </More>
-                    }
-                </Right>
+                        { currentUser && currentUser.uid === userId &&
+                            <More>
+                                <StyledMoreIcon onClick={ handleMoreClick } />
+                            </More>
+                        }
+                    </Right>
             </Bottom>
 
             { open &&
-                <Modal title="Item"
+                <Modal title={ t("Item") }
                     onClose={ () => setOpen(false) }
                 >
                     <Block center
                         onClick={ () => (setOpenEdit(true), setOpen(false)) }
                     >
-                        Edit
+                        { t("Edit") }
                     </Block>
 
                     <Block center
                         onClick={ () => (setOpenHide(true), setOpen(false)) }
                     >
-                        { item.hidden === true ? 'Show' : 'Hide' }
+                        { item.hidden === true ? t('Show') : t('Hide') }
                     </Block>
 
                     <Block center red
                         onClick={ () => (setOpenDelete(true), setOpen(false)) }
                     >
-                        Delete
+                        { t("Delete") }
                     </Block>
                 </Modal>
             }
@@ -156,29 +159,30 @@ const Item = ({
             { openEdit &&
                 <ModalFull onClose={ () => setOpenEdit(false) }
                     disabled={ !itemName || !price }
-                    title="Edit item"
+                    title={ t("Edit item") }
                     onSave={ updateItem }
                 >
                     <Block>
                         <KeyValue value={ itemName }
-                            label="Name"
+                            label={ t("Name") }
                             onChange={ (e) => setItemName(e.target.value) }
                         />
                     </Block>
 
                     <Block>
                         <KeyValue value={ price }
-                            label="Price"
+                            label={ t("Price") }
                             onChange={ (e) => setPrice(e.target.value) }
                             type="number"
                         />
                     </Block>
 
                     <StyledBlock>
-                        <Text bold>Description</Text>
+                        <Text bold>{ t("Description") }</Text>
 
                         <Textarea value={ description }
                             onChange={ (e) => setDescription(e.target.value) }
+                            placeholder={ t("Write description here") }
                         />
                     </StyledBlock>
 
@@ -193,24 +197,24 @@ const Item = ({
 
             { openHide &&
                 <Modal onClose={ () => setOpenHide(false) }
-                    title={ item.hidden ? 'Show item?' : 'Hide item?'}
+                    title={ item.hidden ? t('Show item?') : t('Hide item?') }
                 >
                     <Block center bold
                         onClick={ hideItem }
                     >
-                        { item.hidden ? 'Show' : 'Hide'}
+                        { item.hidden ? t('Show') : t('Hide')}
                     </Block>
                 </Modal>
             }
 
             { openDelete &&
                 <Modal onClose={ () => setOpenDelete(false) }
-                    title='Delete item?'
+                    title={ t('Delete item?') }
                 >
                     <Block center bold red
                         onClick={ deleteItem }
                     >
-                        Delete
+                        { t("Delete") }
                     </Block>
                 </Modal>
             }
@@ -226,26 +230,24 @@ const Root = styled.div`
     cursor: pointer;
 `;
 
+const Price = styled(Text)`
+`;
+
 const StyledBlock = styled(Block)`
     flex-direction: column;
-    align-items: flex-start;
+    align-items: start;
 
     ${ Text } {
         margin-bottom: 12px;
     }
 `;
 
-const Price = styled(Text)`
-    margin-right: 16px;
-    white-space: nowrap;
-`;
-
-const Name = styled(Text)`
-    margin-bottom: 4px;
+const Name = styled(Title)`
     width: 100%;
 `;
 
 const Description = styled(Text)`
+    margin-top: 8px;
     overflow: ${ ({ expanded }) => expanded ? 'auto' : 'hidden' };
     text-overflow: ${ ({ expanded }) => expanded ? 'initial' : 'ellipsis' };
     width: 100%;
@@ -257,26 +259,19 @@ const Description = styled(Text)`
     `}
 `;
 
-const ItemInfo = styled.div`
-    align-items: flex-start;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-`;
-
 const Bottom = styled.div`
     align-items: center;
-    background: ${ ({ theme }) => theme.content };
     border-top: 1px solid ${ ({ theme }) => theme.body };
     display: flex;
     height: 48px;
     justify-content: space-between;
-    margin: 0 16px;
+    margin-top: 8px;
 `;
 
 const Left = styled.div`
     align-items: center;
     display: flex;
+    margin-left: 16px;
 `;
 
 const Right = styled.div`
@@ -285,13 +280,13 @@ const Right = styled.div`
 `;
 
 const More = styled.div`
-    display: flex;
-    justify-content: space-between;
     align-items: center;
-    width: 48px;
-    height: 48px;
-    cursor: pointer;
     border-left: 1px solid ${ ({ theme }) => theme.body };
+    cursor: pointer;
+    display: flex;
+    height: 48px;
+    justify-content: center;
+    width: 48px;
 `;
 
 const StyledMoreIcon = styled(MoreIcon)`
@@ -306,29 +301,25 @@ const StyledMoreIcon = styled(MoreIcon)`
     }
 `;
 
-const Info = styled.div`
-`;
-
 const Content = styled.div`
-    padding: 16px;
+    padding: 16px 16px 8px;
     position: relative;
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
 `;
 
 const ImgContainer = styled.div`
     position: relative;
-    padding-left: 16px;
-    width: 40%;
-    display: ${ ({ expanded }) => expanded ? 'none' : 'block' };
+    img { display: block; }
 `;
 
 const StyledVeganIcon = styled(VeganIcon)`
-    fill: #36E7BB;
+    fill: ${ ({ theme }) => theme.green };
+    height: 24px;
+    width: 24px;
 `;
 
 const Icon = styled.div`
     height: 24px;
+    margin-left: 16px;
+    opacity: ${ ({ disabled }) => disabled ? 0.6 : 1 };
     width: 24px;
 `;

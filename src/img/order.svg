@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <g id="Group_8" data-name="Group 8" transform="translate(-3327 -19286)">
+    <g id="Group_6" data-name="Group 6" transform="translate(0)">
+      <g id="Group_5" data-name="Group 5">
+        <rect id="Rectangle_13" data-name="Rectangle 13" width="24" height="24" transform="translate(3327 19286)" fill="none"/>
+      </g>
+    </g>
+    <g id="Group_7" data-name="Group 7" transform="translate(0 -1.999)">
+      <g id="Group_4" data-name="Group 4" transform="translate(15.543 5.711)">
+        <g id="Group_3" data-name="Group 3" transform="translate(3314.457 19286.979)">
+          <path id="Path_2" data-name="Path 2" d="M0,.568V-.365" transform="translate(9.132 -0.324)" fill="none" stroke="#000" stroke-linecap="round" stroke-width="2"/>
+        </g>
+      </g>
+      <path id="Subtraction_5" data-name="Subtraction 5" d="M22,10H2a10,10,0,0,1,20,0Z" transform="translate(3327 19292)"/>
+      <path id="Fill-19" d="M0,0H20V2.667H0Z" transform="translate(3329 19304.666)" fill-rule="evenodd"/>
+    </g>
+  </g>
+</svg>

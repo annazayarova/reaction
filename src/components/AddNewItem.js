@@ -1,12 +1,14 @@
 import React, { useState, useContext, useEffect } from 'react';
 import firebase from 'firebase';
 import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
 
 import { AuthContext } from '../Auth';
 import Block from './common/Block';
-import db from '../services/firebase';
-import KeyValue from './common/KeyValue';
 import CategoriesList from './CategoriesList';
+import db from '../config/firebase';
+import ImageUpload from './common/ImageUpload';
+import KeyValue from './common/KeyValue';
 import ModalFull from './common/ModalFull';
 import Text from './common/Text';
 import Textarea from './common/Textarea';
@@ -18,6 +20,8 @@ const AddNewItem = ({
     categoryId,
     categoryName
 }) => {
+    const { t, i18n } = useTranslation();
+
     const initialActiveCategoryId = window.localStorage.getItem('activeCategory') || categories[0].id;
 
     const [ itemName, setItemName ] = useState('');
@@ -25,11 +29,27 @@ const AddNewItem = ({
     const [ description, setDescription ] = useState('');
     const [ activeCategoryId, setActiveCategoryId ] = useState(initialActiveCategoryId);
     const [ vegan, setVegan ] = useState(false);
+    const [ image, setImage ] = useState(null);
+    const [ progress, setProgress ] = useState(false);
 
     const { currentUser } = useContext(AuthContext);
 
-    const addItem = (e) => {
+    const handleImageChange = event => {
+        setImage(event.target?.files[0]);
+    };
+    
+    const handleImageDelete = () => {
+        setImage(null);
+    };
+
+    const addItem = async (e) => {
         e.preventDefault();
+        setProgress(true);
+        const storageRef = db.storage().ref(`images/${ currentUser.uid }/`);
+
+        const imageRef = storageRef.child(image.name);
+
+        await imageRef.put(image)
 
         db.firestore()
         .collection('users')
@@ -41,10 +61,12 @@ const AddNewItem = ({
             price,
             description,
             vegan,
+            imageUrl: await imageRef.getDownloadURL(),
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
         });
 
         onClose();
+        setProgress(false);
     };
 
     useEffect(() => {
@@ -53,41 +75,22 @@ const AddNewItem = ({
 
     return (
         <ModalFull disabled={ !itemName || !price }
-                title="New item"
+                title={ t("New item") }
                 onClose={ onClose  }
                 onSave={ addItem }
-                label="Create"
+                label={ progress ? "Creating..." : "Create" }
             >
                 <Block>
-                    <KeyValue value={ itemName }
-                        label="Name"
-                        onChange={ (e) => setItemName(e.target.value) }
-                        placeholder="Name"
-                        autoFocus={ true }
+                    <ImageUpload onImageChange={ handleImageChange }
+                        image={ image }
+                        onDelete={ handleImageDelete }
                     />
                 </Block>
-
-                <Block>
-                    <KeyValue value={ price }
-                        label="Price"
-                        onChange={ (e) => setPrice(e.target.value) }
-                        placeholder="0,00"
-                        type="number"
-                    />
-                </Block>
-
-                <StyledBlock>
-                    <Text bold>Description</Text>
-
-                    <Textarea value={ description }
-                        onChange={ (e) => setDescription(e.target.value) }
-                    />
-                </StyledBlock>
 
                 <Block>
                     <CategoryBlock>
                         <StyledText bold>
-                            Category
+                        { t("Category") }
                         </StyledText>
 
                         { categoryId ? <Text>{ categoryName }</Text>
@@ -98,6 +101,32 @@ const AddNewItem = ({
                         }
                     </CategoryBlock>
                 </Block>
+                
+                <Block>
+                    <KeyValue value={ itemName }
+                        label={ t("Name") }
+                        onChange={ (e) => setItemName(e.target.value) }
+                        placeholder={ t("Name") }
+                    />
+                </Block>
+
+                <Block>
+                    <KeyValue value={ price }
+                        label={ t("Price") }
+                        onChange={ (e) => setPrice(e.target.value) }
+                        placeholder="0,00"
+                        type="number"
+                    />
+                </Block>
+
+                <StyledBlock>
+                    <Text bold>{ t("Description") }</Text>
+
+                    <Textarea value={ description }
+                        onChange={ (e) => setDescription(e.target.value) }
+                        placeholder={ t("Write description here") }
+                    />
+                </StyledBlock>
 
                 <Block>
                     <Text bold>Vegetarian or Vegan</Text>

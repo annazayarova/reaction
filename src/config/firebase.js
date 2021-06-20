@@ -1,7 +1,7 @@
 import * as firebase from 'firebase';
 import 'firebase/auth';
 import 'firebase/storage';
-import "firebase/performance";
+import 'firebase/performance';
 
 const db = firebase.initializeApp({
     apiKey: process.env.REACT_APP_FIREBASE_KEY,

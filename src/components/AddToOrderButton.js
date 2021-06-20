@@ -1,23 +1,20 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-import { ReactComponent as DoneIcon } from '../img/done.svg';
 import { ReactComponent as AddIcon } from '../img/add.svg';
+import { ReactComponent as RemoveIcon } from '../img/remove.svg';
+import Text from '../components/common/Text';
 
-const AddToOrderButton = () => {
-    const [added, setAdded] = useState(false);
+const AddToOrderButton = ({
+    count
 
-
-    const handleAdd = (e) => {
-        e.stopPropagation();
-        setAdded(!added);
-    };
+}) => {
 
     return (
-        <Root onClick={ handleAdd }
-            added={ added }
-        >
-            { added ? <StyledDoneIcon /> : <StyledAddIcon /> }
+        <Root>
+            <IncButton>
+                <StyledAddIcon  />
+            </IncButton>        
         </Root>
     )
 }
@@ -26,31 +23,33 @@ export default AddToOrderButton;
 
 const Root = styled.div`
     align-items: center;
-    background: ${ ({ added, theme }) => added ? theme.primary : '' };
-    border-radius: 50%;
-    border : 1px solid ${ ({ added, theme }) => added ? theme.primary : theme.border };
     color: ${ ({ theme }) => theme.text };
     display: flex;
-    font-family: regular;
-    justify-content: center;
-    text-transform: uppercase;
-    width: 40px;
-    height: 40px;
-    flex-shrink: 0;
 `;
 
-const StyledDoneIcon = styled(DoneIcon)`
-    width: 24px;
-    height: 24px;
+const IncButton = styled.div`
+    align-items: center;
+    border-left: 1px solid ${ ({ theme }) => theme.body };
+    display: flex;
+    flex-shrink: 0;
+    height: 48px;
+    justify-content: center;
+    width: 48px;
+
+`;
+
+const StyledAddIcon = styled(AddIcon)`
+    width: 20px;
+    height: 20px;
 
     path {
         &:last-of-type {
-            fill: white;
+            fill: ${ ({ theme }) => theme.text };
         }
     }
 `;
 
-const StyledAddIcon = styled(AddIcon)`
+const StyledRemoveIcon = styled(RemoveIcon)`
     width: 20px;
     height: 20px;
 

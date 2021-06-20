@@ -1,60 +1,40 @@
 import React, { useState } from "react";
 import styled from 'styled-components';
 
-import db from "../../services/firebase";
+import db from'../../config/firebase';
 import Text from './Text';
+import { ReactComponent as DeleteIcon } from '../../img/delete.svg';
+import { ReactComponent as EditIcon } from '../../img/edit.svg';
 
-const ImageUpload = ({ userId }) => {
-    const [ image, setImage ] = useState(null);
-    const [ url, setUrl ] = useState('');
-    const [ inProgress, setInProgress ] = useState(0);
-
-    const handleChange = event => {
-        setImage(event.target?.files[0]);
-    };
-
-    const handleUpload = () => {
-        const uploadTask = db.storage().ref(`images/${ userId }/${ image.name }`).put(image);
-
-        uploadTask.on(
-            "state_changed",
-            snapshot => {
-                const newProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-
-                console.log('Upload is ' + newProgress + '% done');
-
-                setInProgress(newProgress);
-            },
-            error => {
-                console.log(error);
-            },
-            () => {
-                db.storage()
-                .ref(`images/${ userId }/`)
-                .child(image.name)
-                .getDownloadURL()
-                .then(url => {
-                    setUrl(url);
-                });
-            }
-        );
-    };
-
+const ImageUpload = ({ image, onImageChange, onDelete }) => {
     return (
         <Root>
-			<input type="file" onChange={ handleChange } />
+			{ !image && <Label>
+                <input type="file" onChange={ onImageChange } />
+                <Text grey>
+                    Choose image
+                </Text>
+            </Label> }
 
-			{ inProgress > 0 &&
-				<Text>Upload is { inProgress.toFixed(0) }% done</Text>
-			}
+			{ image && 
+                <Image>
+                    <img src={ URL.createObjectURL(image) }
+				    alt="Reaction menu" />
 
-			<button onClick={ handleUpload }>Submit</button>
+                    <Controls>
+                        <Icon>
+                            <label>
+                                <StyledEditIcon />
+                                <input type="file" onChange={ onImageChange } />
+                            </label>
+                        </Icon> 
 
-			<img src={ url || "https://via.placeholder.com/400x300" }
-				alt="Reaction menu"
-				height="300"
-				width="400"
-			/>
+                        <Icon onClick={ onDelete }>
+                            <StyledDeleteIcon />
+                        </Icon>  
+                    </Controls>   
+                </Image> 
+            }
 	</Root>
     );
 }
@@ -62,5 +42,68 @@ const ImageUpload = ({ userId }) => {
 export default ImageUpload;
 
 const Root  = styled.div`
+    width: 100%;
+    position: relative;
+`;
 
+const Image  = styled.div`
+    position: relative;
+`;
+
+const StyledDeleteIcon  = styled(DeleteIcon)`
+    height: 24px;
+    width: 24px;
+
+    path {
+        &:last-of-type {
+            fill: ${ ({ theme }) => theme.red }
+        }
+    }
+`;
+
+const Icon  = styled.div`
+    align-items: center;
+    background: rgba(255,255,255,0.6);
+    border-radius: 50%;
+    display: flex;
+    height: 40px;
+    justify-content: center;
+    width: 40px;
+    margin-left: 12px;
+
+    input[type="file"] {
+        display: none;
+    }
+`;
+
+const Controls  = styled.div`
+    position: absolute;
+    right: 8px;
+    top: 8px;
+    display: flex;
+`;
+
+const StyledEditIcon  = styled(EditIcon)`
+    height: 24px;
+    width: 24px;
+
+    path {
+        &:last-of-type {
+            fill: ${ ({ theme }) => theme.text }
+        }
+    }
+`;
+
+const Label = styled.label`
+    align-items: center;
+    background: ${ ({ theme }) => theme.body };
+    display: flex;
+    height: 120px;
+    justify-content: center;
+    width: 100%;
+    border-radius: 8px;
+
+    input[type="file"] {
+        display: none;
+    }
 `;

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import ReactDOM from "react-dom";
 import { useTranslation } from 'react-i18next';
 
-import Title from '../common/Title';
+import Text from '../common/Text';
 import useLockBodyScroll from '../../hooks/useLockBodyScroll';
 import Block from '../common/Block';
 
@@ -31,12 +31,12 @@ const JSX_MODAL = ({
     return (
         <Window onClick={ handleClick }>
             <Root ref={ ref }>
-                    <Header>
-                        <StyledTitle medium>
-                            { title }
-                        </StyledTitle>
-                    </Header>
-
+                { title && <Header>
+                    <StyledTitle medium>
+                        { title }
+                    </StyledTitle>
+                </Header>
+                }
                     { children }
 
                     <Block onClick={ onClose }
@@ -93,6 +93,6 @@ const Root  = styled.div`
     width: 80%;
 `;
 
-const StyledTitle  = styled(Title)`
+const StyledTitle  = styled(Text)`
     text-align: center;
 `;

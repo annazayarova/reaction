@@ -11,7 +11,7 @@ const Categories = ({
 }) => {
     return (
         <Root>
-            { categories.map(category => (
+            { categories && categories.map(category => (
                 <Category key={ category.id }
                     category={ category }
                     items={ items }
@@ -19,7 +19,7 @@ const Categories = ({
                     userId={ userId }
                     categories={ categories }
                 />
-            ))}
+            )) }
         </Root>
     );
 }

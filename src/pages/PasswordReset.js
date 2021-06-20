@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 import { loginRoute } from '../helpers/routes';
 import Button from '../components/common/Button';
-import db from "../services/firebase";
+import db from "../config/firebase";
 import Input from '../components/common/Input';
 import Text from '../components/common/Text';
 import Title from '../components/common/Title';

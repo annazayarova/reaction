@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 
-import Share from './common/Share';
+import { AuthContext } from '../Auth';
+import OrderButton from './OrderButton';
 import Settings from './Settings';
 import Title from './common/Title';
 
@@ -12,8 +13,12 @@ const Header = ({
     userId,
     businessName
 }) => {
+    const { currentUser } = useContext(AuthContext);
+
+    const user = currentUser && currentUser.uid === userId;
+
     return (
-        <Root>
+        <Root user={ user }>
             <Settings theme={ theme }
                 onToggleTheme={ onToggleTheme }
                 themeToggled={ themeToggled }
@@ -24,7 +29,7 @@ const Header = ({
                 { businessName }
             </Title>
 
-            <Share />
+            <OrderButton />
         </Root>
     );
 }
@@ -38,6 +43,8 @@ const Root  = styled.div`
     display: flex;
     height: 64px;
     justify-content: space-between;
-    position: relative;
+    position: fixed;
     width: 100%;
+    top: ${ ({ user }) => user ? '64px' : 0 };
+    z-index: 2;
 `;
