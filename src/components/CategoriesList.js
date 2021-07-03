@@ -66,7 +66,7 @@ const StyledActiveIcon = styled(ActiveIcon)`
 `;
 
 const StyledLink = styled(Link)`
-    text-transform: capitalize;
+    text-transform: uppercase;
 `;
 
 const Root = styled.div`
@@ -80,7 +80,7 @@ const BackLink = styled(Link)`
 `;
 
 const StyledText = styled(Text)`
-    text-transform: capitalize;
+    text-transform: uppercase;
     font-family: ${ ({ activeCategory }) => activeCategory && 'bold' }
 `;
 

@@ -1,23 +1,25 @@
 import React, { useState, useContext } from 'react';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { useTranslation } from 'react-i18next';
+import firebase from 'firebase';
 
 import { ReactComponent as MoreIcon} from '../img/more.svg';
 import { ReactComponent as VeganIcon } from '../img/vegan.svg';
 
 import { AuthContext } from '../Auth';
+import { resizeImage } from './common/ImageUpload';
 import AddToOrderButton from './AddToOrderButton';
 import Block from './common/Block';
 import db from '../config/firebase';
+import ImageUpload from './common/ImageUpload';
 import KeyValue from './common/KeyValue';
+import LoadingSpinner from './common/Loadings/LoadingSpinner';
 import Modal from './common/Modal';
 import ModalFull from './common/ModalFull';
 import Text from './common/Text';
 import Textarea from './common/Textarea';
 import Title from './common/Title';
 import Toggle from './common/Toggle';
-
-import img from '../img/1.jpeg';
 
 const Item = ({
     item,
@@ -29,6 +31,8 @@ const Item = ({
 }) => {
     const { t, i18n } = useTranslation();
 
+    const theme = useTheme();
+
     const [ itemName, setItemName ] = useState(item.name || '')
     const [ price, setPrice ] = useState(item.price || '')
     const [ description, setDescription ] = useState(item.description || '')
@@ -38,25 +42,12 @@ const Item = ({
     const [ openDelete, setOpenDelete ] = useState(false);
     const [ expanded, setExpanded ] = useState(false);
     const [ vegan, setVegan ] = useState(item.vegan || false);
+    const [ image, setImage ] = useState(item.imageUrl ? item.imageUrl : null);
+    const [ imageUrl, setImageUrl ] = useState('');
+    const [ progress, setProgress ] = useState(false);
+    const [ imageIsUploading, setImageIsUploading ] = useState(false);
 
     const { currentUser } = useContext(AuthContext);
-
-    const docRef = currentUser && db.firestore()
-    .collection('users')
-    .doc(currentUser.uid)
-    .collection('items');
-
-    const updateItem = () => {
-        docRef
-        .doc(item.id).set({
-            name: itemName.trim(),
-            price: price.trim(),
-            description: description.trim(),
-            vegan
-        }, { merge: true })
-
-        setOpenEdit(false);
-    };
 
     const hideItem = () => {
         docRef
@@ -79,6 +70,65 @@ const Item = ({
         e.stopPropagation();
         setOpen(true)
     }
+
+    const handleImageChange = async (event) => {
+        setImageIsUploading(true)
+        try {
+            const resizedImage = await resizeImage(event.target.files[0]);
+            setImage(resizedImage);
+            setImageIsUploading(false);
+        } catch (err) {
+          console.log(err);
+        }
+      }; 
+
+    const handleImageDelete = () => {
+        setImage(null);
+    };
+
+    const docRef = currentUser && db.firestore()
+    .collection('users')
+    .doc(currentUser.uid)
+    .collection('items');
+
+    const updateItem = async () => {
+        setProgress(true);
+
+        const storageRef = db.storage().ref(`images/${ currentUser.uid }/`);
+
+        const imageRef = image && storageRef.child(`${ item.id }.JPEG`);
+
+        let url = '';
+
+        if (image) {
+            try { 
+                await imageRef.put(image)
+                .then(() => imageRef.getDownloadURL())
+                .then((img) => url = img)
+            } 
+            catch(error) { alert(error) }
+        } 
+
+        if (!image && item.imageUrl) {
+            const ref = storageRef.child(`${ item.id }.JPEG`);
+
+            ref.delete()
+        }
+
+        docRef
+        .doc(item.id).set({
+            description: description.trim(),
+            imageUrl: url || null,
+            name: itemName.trim(),
+            price: price.trim(),
+            vegan
+        }, { merge: true })
+
+        setProgress(false);
+
+        setOpenEdit(false);
+    };
+
     if ((item.hidden === true || hiddenCategory) && currentUser?.uid !== userId) {
         return null;
     }
@@ -161,19 +211,31 @@ const Item = ({
                     disabled={ !itemName || !price }
                     title={ t("Edit item") }
                     onSave={ updateItem }
+                    label={ progress ? <LoadingSpinner color={ theme.primary } size="24px" /> : t("Save") }
                 >
                     <Block>
-                        <KeyValue value={ itemName }
-                            label={ t("Name") }
-                            onChange={ (e) => setItemName(e.target.value) }
+                        <ImageUpload onImageChange={ handleImageChange }
+                            image={ image }
+                            onDelete={ handleImageDelete }
+                            inProgress={ imageIsUploading }
                         />
                     </Block>
 
                     <Block>
-                        <KeyValue value={ price }
+                        <KeyValue value={ itemName }
+                            label={ t("Title") }
+                            onChange={ (e) => setItemName(e.target.value) }
+                            required
+                        />
+                    </Block>
+
+                    <Block>
+                        <KeyValue value={ price.replace(/,/g, '.') }
                             label={ t("Price") }
                             onChange={ (e) => setPrice(e.target.value) }
                             type="number"
+                            placeholder="0.00"
+                            required
                         />
                     </Block>
 

@@ -64,7 +64,7 @@ const CheckBox = styled.input`
     z-index: 1;
 
     &:checked + ${ CheckBoxLabel } {
-        background: ${ ({ theme }) => theme.primary };
+        background: ${ ({ theme }) => theme.green };
 
         &::after {
             border-radius: 50%;

@@ -11,12 +11,15 @@ const KeyValue = ({
     value,
     onChange,
     placeholder,
-    type = 'text'
+    type = 'text',
+    required
 }) => {
     return (
         <Root>
             <StyledText bold>
                 { label }
+
+                { required && <Required>*</Required> }
             </StyledText>
 
             <Input autoFocus={ autoFocus }
@@ -34,10 +37,15 @@ export default KeyValue;
 
 const Root  = styled.div`
     align-items: center;
+    text-align: left;
     display: flex;
     width: 100%;
 `;
 
 const StyledText  = styled(Text)`
-    margin-right: 24px;
+    min-width: 96px;
+`;
+
+const Required  = styled.span`
+    margin-left: 4px;
 `;

@@ -11,10 +11,9 @@ const JSX_MODAL = (props) => {
     const { t, i18n } = useTranslation();
 
     const { children,
-        label = "Update",
+        label = "Save",
         onClose,
         onSave,
-        open,
         disabled,
         title 
     } = props;
@@ -35,9 +34,7 @@ const JSX_MODAL = (props) => {
 
     return (
         <Window onClick={ handleClick }>
-            <Root open={ open }
-                ref={ ref }
-            >
+            <Root ref={ ref }>
                 <Header>
                     <Close label="Cancel"
                         onClick={ onClose }

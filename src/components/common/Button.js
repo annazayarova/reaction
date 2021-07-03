@@ -54,7 +54,6 @@ const Root = styled.button`
     &:disabled {
         color: ${ ({ notTransparent, theme }) => notTransparent ? '' : theme.disabled };
         cursor: unset;
-        pointer-events: none;
     }
 
     &:active {

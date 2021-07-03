@@ -1,53 +1,82 @@
-import React, { useState } from "react";
+import { useTheme } from 'styled-components';
+import { useTranslation } from 'react-i18next';
+import React from "react";
+import Resizer from "react-image-file-resizer";
 import styled from 'styled-components';
 
-import db from'../../config/firebase';
-import Text from './Text';
 import { ReactComponent as DeleteIcon } from '../../img/delete.svg';
-import { ReactComponent as EditIcon } from '../../img/edit.svg';
+import LoadingSpinner from './Loadings/LoadingSpinner';
+import Text from './Text';
 
-const ImageUpload = ({ image, onImageChange, onDelete }) => {
-    return (
-        <Root>
-			{ !image && <Label>
-                <input type="file" onChange={ onImageChange } />
-                <Text grey>
-                    Choose image
-                </Text>
-            </Label> }
-
-			{ image && 
-                <Image>
-                    <img src={ URL.createObjectURL(image) }
-				    alt="Reaction menu" />
-
-                    <Controls>
-                        <Icon>
-                            <label>
-                                <StyledEditIcon />
-                                <input type="file" onChange={ onImageChange } />
-                            </label>
-                        </Icon> 
-
-                        <Icon onClick={ onDelete }>
-                            <StyledDeleteIcon />
-                        </Icon>  
-                    </Controls>   
-                </Image> 
-            }
-	</Root>
+export const resizeImage = (image) =>
+new Promise((resolve) => {
+    Resizer.imageFileResizer(
+        image,
+        800,
+        800,
+        "JPEG",
+        100,
+        0,
+        (uri) => {
+            resolve(uri);
+        },
+        "file"
     );
+});
+
+const ImageUpload = ({ image, onImageChange, onDelete, inProgress }) => {
+    const { t, i18n } = useTranslation();
+    const theme = useTheme();
+
+    if (image) {
+        return (
+            <Image>
+                <img src={ typeof image === 'object' ? URL.createObjectURL(image) : image }
+				    alt="Reaction menu" 
+                />
+
+                <Controls>
+                    <Icon onClick={ onDelete }>
+                        <StyledDeleteIcon />
+                    </Icon>  
+                </Controls>   
+            </Image>
+        )
+    }
+
+    if (inProgress) {
+        return (
+            <Label>
+               <LoadingSpinner color={ theme.primary } 
+                size='32px'
+               />
+            </Label> 
+        )
+    }
+
+    return (
+        <Label>
+            <input type="file" onChange={ onImageChange } 
+                accept="image/x-png,image/jpeg"
+            />
+                <Text grey>
+                    { t("Add photo") }
+                </Text>
+        </Label> 
+    )
 }
 
 export default ImageUpload;
 
-const Root  = styled.div`
-    width: 100%;
-    position: relative;
-`;
-
 const Image  = styled.div`
+    background: ${ ({ theme }) => theme.body };
     position: relative;
+    width: 100%;
+    min-height: 120px;
+
+    img {
+        display: block; 
+    }
 `;
 
 const StyledDeleteIcon  = styled(DeleteIcon)`
@@ -83,17 +112,6 @@ const Controls  = styled.div`
     display: flex;
 `;
 
-const StyledEditIcon  = styled(EditIcon)`
-    height: 24px;
-    width: 24px;
-
-    path {
-        &:last-of-type {
-            fill: ${ ({ theme }) => theme.text }
-        }
-    }
-`;
-
 const Label = styled.label`
     align-items: center;
     background: ${ ({ theme }) => theme.body };
@@ -101,7 +119,6 @@ const Label = styled.label`
     height: 120px;
     justify-content: center;
     width: 100%;
-    border-radius: 8px;
 
     input[type="file"] {
         display: none;

@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import firebase from 'firebase';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { useTranslation } from 'react-i18next';
 
 import { AuthContext } from '../Auth';
@@ -13,6 +13,8 @@ import ModalFull from './common/ModalFull';
 import Text from './common/Text';
 import Textarea from './common/Textarea';
 import Toggle from './common/Toggle';
+import { resizeImage } from './common/ImageUpload';
+import LoadingSpinner from './common/Loadings/LoadingSpinner';
 
 const AddNewItem = ({
     categories,
@@ -21,6 +23,8 @@ const AddNewItem = ({
     categoryName
 }) => {
     const { t, i18n } = useTranslation();
+
+    const theme = useTheme();
 
     const initialActiveCategoryId = window.localStorage.getItem('activeCategory') || categories[0].id;
 
@@ -31,42 +35,61 @@ const AddNewItem = ({
     const [ vegan, setVegan ] = useState(false);
     const [ image, setImage ] = useState(null);
     const [ progress, setProgress ] = useState(false);
+    const [ imageIsUploading, setImageIsUploading ] = useState(false);
 
     const { currentUser } = useContext(AuthContext);
 
-    const handleImageChange = event => {
-        setImage(event.target?.files[0]);
-    };
-    
-    const handleImageDelete = () => {
+    const storageRef = db.storage().ref(`images/${ currentUser.uid }/`);
+
+    const handleImageChange = async (event) => {
+        setImageIsUploading(true)
+        try {
+            const resizedImage = await resizeImage(event.target.files[0]);
+            setImage(resizedImage);
+            setImageIsUploading(false);
+        } catch (err) {
+          console.log(err);
+        }
+      };
+
+      const handleImageDelete = async () => {
         setImage(null);
     };
 
     const addItem = async (e) => {
         e.preventDefault();
         setProgress(true);
-        const storageRef = db.storage().ref(`images/${ currentUser.uid }/`);
 
-        const imageRef = storageRef.child(image.name);
+        const imageRef = image && storageRef.child(image.name);
 
-        await imageRef.put(image)
+        let url = '';
+
+        if (image) {
+            try { 
+                await imageRef.put(image)
+                .then(() => imageRef.getDownloadURL())
+                .then((img) => url = img)
+            } 
+            catch(error) { alert(error) }
+        } 
 
         db.firestore()
-        .collection('users')
-        .doc(currentUser.uid)
-        .collection('items')
-        .add({
-            name: itemName,
-            categoryId: categoryId ? categoryId : activeCategoryId,
-            price,
-            description,
-            vegan,
-            imageUrl: await imageRef.getDownloadURL(),
-            timestamp: firebase.firestore.FieldValue.serverTimestamp()
-        });
+            .collection('users')
+            .doc(currentUser.uid)
+            .collection('items')
+            .add({
+                categoryId: categoryId ? categoryId : activeCategoryId,
+                description,
+                imageUrl: url || null,
+                name: itemName,
+                price: price.trim(),
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                vegan
+            })
+        
+        setProgress(false);
 
         onClose();
-        setProgress(false);
     };
 
     useEffect(() => {
@@ -78,12 +101,13 @@ const AddNewItem = ({
                 title={ t("New item") }
                 onClose={ onClose  }
                 onSave={ addItem }
-                label={ progress ? "Creating..." : "Create" }
+                label={ progress ? <LoadingSpinner color={ theme.primary } size="24px" /> : t("Create") }
             >
                 <Block>
                     <ImageUpload onImageChange={ handleImageChange }
                         image={ image }
                         onDelete={ handleImageDelete }
+                        inProgress={ imageIsUploading }
                     />
                 </Block>
 
@@ -93,7 +117,7 @@ const AddNewItem = ({
                         { t("Category") }
                         </StyledText>
 
-                        { categoryId ? <Text>{ categoryName }</Text>
+                        { categoryId ? <CategoryName>{ categoryName }</CategoryName>
                             : <CategoriesList categories={ categories }
                                 activeCategoryId={ activeCategoryId }
                                 onCategoryChange={ (category) => setActiveCategoryId(category) }
@@ -104,9 +128,10 @@ const AddNewItem = ({
                 
                 <Block>
                     <KeyValue value={ itemName }
-                        label={ t("Name") }
+                        label={ t("Title") }
                         onChange={ (e) => setItemName(e.target.value) }
-                        placeholder={ t("Name") }
+                        placeholder={ t("Title") }
+                        required
                     />
                 </Block>
 
@@ -114,8 +139,9 @@ const AddNewItem = ({
                     <KeyValue value={ price }
                         label={ t("Price") }
                         onChange={ (e) => setPrice(e.target.value) }
-                        placeholder="0,00"
+                        placeholder="0.00"
                         type="number"
+                        required
                     />
                 </Block>
 
@@ -146,7 +172,12 @@ const CategoryBlock = styled.div`
 `;
 
 const StyledText = styled(Text)`
-    margin-right: 24px;
+    min-width: 96px;
+    text-align: left;
+`;
+
+const CategoryName = styled(Text)`
+    text-transform: uppercase;
 `;
 
 const StyledBlock = styled(Block)`
